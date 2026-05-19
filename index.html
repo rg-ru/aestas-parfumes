@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aestas Parfumes | Perfume Boutique</title>
+  <meta name="description" content="A modern beige perfume storefront with curated fragrances.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#" class="brand">Aestas Parfumes</a>
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="#shop">Shop</a>
+        <a href="#collections">Collections</a>
+        <a href="#story">Our Story</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <div class="header-actions">
+        <button class="icon-btn" aria-label="Search">
+          <i data-lucide="search"></i>
+        </button>
+        <button class="icon-btn" aria-label="View shopping bag">
+          <i data-lucide="shopping-bag"></i>
+          <span class="bag-count" id="bagCount">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="collections">
+      <img
+        class="hero-image"
+        src="https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=1800&q=80"
+        alt="Luxury perfume bottles arranged on a table"
+      >
+      <div class="hero-overlay"></div>
+      <div class="container hero-content">
+        <p class="eyebrow">Signature Collection 2026</p>
+        <h1>Perfumes with character, warmth, and depth.</h1>
+        <p>Discover handcrafted scents inspired by precious woods, spices, white florals, and fresh citrus accords.</p>
+        <div class="hero-cta">
+          <a href="#shop" class="btn btn-primary">
+            <i data-lucide="sparkles"></i>
+            Shop Now
+          </a>
+          <a href="#story" class="btn btn-secondary">Read Story</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="highlights">
+      <div class="container highlight-grid">
+        <article>
+          <h3>Free Shipping</h3>
+          <p>For all orders over 70 EUR in Germany.</p>
+        </article>
+        <article>
+          <h3>Gift Ready</h3>
+          <p>Premium beige wrapping included by default.</p>
+        </article>
+        <article>
+          <h3>Sample Set</h3>
+          <p>Get 3 test vials with every 100 ml bottle.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="shop-section" id="shop">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Shop</p>
+            <h2>Curated Fragrances</h2>
+          </div>
+          <div class="filter-group" role="tablist" aria-label="Filter perfumes by scent family">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="fresh">Fresh</button>
+            <button class="filter-btn" data-filter="amber">Amber</button>
+            <button class="filter-btn" data-filter="oud">Oud</button>
+          </div>
+        </div>
+
+        <div class="product-grid" id="productGrid">
+          <article class="product-card" data-category="fresh">
+            <img src="https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=900&q=80" alt="Frosted perfume bottle with silver details">
+            <div class="product-info">
+              <h3>Velvet Neroli</h3>
+              <p>Italian bergamot, neroli, white musk</p>
+              <div class="product-meta">
+                <span>89 EUR</span>
+                <button class="add-btn">
+                  <i data-lucide="plus"></i>
+                  Add
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-category="amber">
+            <img src="https://images.unsplash.com/photo-1589782182703-2aaa69037b5b?auto=format&fit=crop&w=900&q=80" alt="Amber perfume bottle with warm light reflection">
+            <div class="product-info">
+              <h3>Golden Resin</h3>
+              <p>Amber accord, vanilla bean, soft woods</p>
+              <div class="product-meta">
+                <span>109 EUR</span>
+                <button class="add-btn">
+                  <i data-lucide="plus"></i>
+                  Add
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-category="oud">
+            <img src="https://images.unsplash.com/photo-1615529328331-f8917597711f?auto=format&fit=crop&w=900&q=80" alt="Dark perfume bottle with golden cap on stone surface">
+            <div class="product-info">
+              <h3>Midnight Oud</h3>
+              <p>Laotian oud, saffron, smoked cedar</p>
+              <div class="product-meta">
+                <span>135 EUR</span>
+                <button class="add-btn">
+                  <i data-lucide="plus"></i>
+                  Add
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-category="fresh">
+            <img src="https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=900&q=80" alt="Minimal clear perfume bottle with light beige background">
+            <div class="product-info">
+              <h3>Silk Citrus</h3>
+              <p>Mandarin peel, petitgrain, clean vetiver</p>
+              <div class="product-meta">
+                <span>95 EUR</span>
+                <button class="add-btn">
+                  <i data-lucide="plus"></i>
+                  Add
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-category="amber">
+            <img src="https://images.unsplash.com/photo-1617897903246-719242758050?auto=format&fit=crop&w=900&q=80" alt="Elegant perfume bottle next to flowers">
+            <div class="product-info">
+              <h3>Amber Veil</h3>
+              <p>Tonka absolute, iris petals, warm benzoin</p>
+              <div class="product-meta">
+                <span>119 EUR</span>
+                <button class="add-btn">
+                  <i data-lucide="plus"></i>
+                  Add
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-category="oud">
+            <img src="https://images.unsplash.com/photo-1595425970377-c9703cf48b6d?auto=format&fit=crop&w=900&q=80" alt="Luxury perfume bottle with dark and gold tones">
+            <div class="product-info">
+              <h3>Royal Incense</h3>
+              <p>Frankincense tears, oud wood, black tea</p>
+              <div class="product-meta">
+                <span>142 EUR</span>
+                <button class="add-btn">
+                  <i data-lucide="plus"></i>
+                  Add
+                </button>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="story-section" id="story">
+      <div class="container story-grid">
+        <img src="https://images.unsplash.com/photo-1615368143753-2f2b5f4f0b95?auto=format&fit=crop&w=1200&q=80" alt="Perfume making setup with raw ingredients">
+        <div class="story-text">
+          <p class="eyebrow">Our Story</p>
+          <h2>Crafted in small batches.</h2>
+          <p>
+            Each perfume is blended in a limited run and rested before bottling.
+            We focus on long-lasting compositions with balanced projection and a refined dry down.
+          </p>
+          <a href="#contact" class="btn btn-secondary">
+            <i data-lucide="mail"></i>
+            Contact Us
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="contact">
+    <div class="container footer-grid">
+      <div>
+        <h3>Aestas Parfumes</h3>
+        <p>Premium perfumes for modern everyday luxury.</p>
+      </div>
+      <div>
+        <h4>Visit</h4>
+        <p>Berlin, Germany</p>
+      </div>
+      <div>
+        <h4>Email</h4>
+        <p>hello@aestasparfumes.com</p>
+      </div>
+      <div>
+        <h4>Phone</h4>
+        <p>+49 30 1234 5678</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="./script.js"></script>
+</body>
+</html>
