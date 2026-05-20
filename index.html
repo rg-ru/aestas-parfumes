@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="en">
+<html lang="de">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Aestas Parfumes | Perfume Boutique</title>
-  <meta name="description" content="A modern beige perfume storefront with curated fragrances.">
+  <meta name="description" content="Moderner Online-Shop fuer Parfums mit Warenkorb, Produktverwaltung, Maps-Suche und Chat.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
@@ -14,17 +14,18 @@
   <header class="site-header">
     <div class="container header-inner">
       <a href="#" class="brand">Aestas Parfumes</a>
-      <nav class="site-nav" aria-label="Main navigation">
+      <nav class="site-nav" aria-label="Hauptnavigation">
         <a href="#shop">Shop</a>
-        <a href="#collections">Collections</a>
-        <a href="#story">Our Story</a>
-        <a href="#contact">Contact</a>
+        <a href="#produkte">Produkte</a>
+        <a href="#filiale">Filiale</a>
+        <a href="#chats">Chats</a>
+        <a href="#contact">Kontakt</a>
       </nav>
       <div class="header-actions">
-        <button class="icon-btn" aria-label="Search">
+        <button class="icon-btn" type="button" aria-label="Suche">
           <i data-lucide="search"></i>
         </button>
-        <button class="icon-btn" aria-label="View shopping bag">
+        <button class="icon-btn" id="cartToggleBtn" type="button" aria-label="Warenkorb oeffnen">
           <i data-lucide="shopping-bag"></i>
           <span class="bag-count" id="bagCount">0</span>
         </button>
@@ -37,19 +38,19 @@
       <img
         class="hero-image"
         src="https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=1800&q=80"
-        alt="Luxury perfume bottles arranged on a table"
+        alt="Luxurioese Parfumflakons auf Tisch"
       >
       <div class="hero-overlay"></div>
       <div class="container hero-content">
         <p class="eyebrow">Signature Collection 2026</p>
-        <h1>Perfumes with character, warmth, and depth.</h1>
-        <p>Discover handcrafted scents inspired by precious woods, spices, white florals, and fresh citrus accords.</p>
+        <h1>Moderne Duefte fuer deinen Stil.</h1>
+        <p>Entdecke exklusive Kompositionen mit Zitrusnoten, Amber-Akkorden und elegantem Oud.</p>
         <div class="hero-cta">
           <a href="#shop" class="btn btn-primary">
             <i data-lucide="sparkles"></i>
-            Shop Now
+            Jetzt shoppen
           </a>
-          <a href="#story" class="btn btn-secondary">Read Story</a>
+          <a href="#filiale" class="btn btn-secondary">Filiale finden</a>
         </div>
       </div>
     </section>
@@ -57,16 +58,16 @@
     <section class="highlights">
       <div class="container highlight-grid">
         <article>
-          <h3>Free Shipping</h3>
-          <p>For all orders over 70 EUR in Germany.</p>
+          <h3>Kostenloser Versand</h3>
+          <p>Ab 70 EUR innerhalb Deutschlands.</p>
         </article>
         <article>
-          <h3>Gift Ready</h3>
-          <p>Premium beige wrapping included by default.</p>
+          <h3>Geschenkbereit</h3>
+          <p>Premium-Verpackung in Beige inklusive.</p>
         </article>
         <article>
-          <h3>Sample Set</h3>
-          <p>Get 3 test vials with every 100 ml bottle.</p>
+          <h3>Probevials</h3>
+          <p>Ab 100 ml erhaeltst du 3 Tester gratis.</p>
         </article>
       </div>
     </section>
@@ -76,102 +77,162 @@
         <div class="section-head">
           <div>
             <p class="eyebrow">Shop</p>
-            <h2>Curated Fragrances</h2>
+            <h2>Kuratiertes Sortiment</h2>
           </div>
-          <div class="filter-group" role="tablist" aria-label="Filter perfumes by scent family">
-            <button class="filter-btn active" data-filter="all">All</button>
-            <button class="filter-btn" data-filter="fresh">Fresh</button>
-            <button class="filter-btn" data-filter="amber">Amber</button>
-            <button class="filter-btn" data-filter="oud">Oud</button>
+          <div class="filter-group" role="tablist" aria-label="Filter nach Duftfamilie">
+            <button class="filter-btn active" type="button" data-filter="all">Alle</button>
+            <button class="filter-btn" type="button" data-filter="fresh">Frisch</button>
+            <button class="filter-btn" type="button" data-filter="amber">Amber</button>
+            <button class="filter-btn" type="button" data-filter="oud">Oud</button>
           </div>
         </div>
 
         <div class="product-grid" id="productGrid">
-          <article class="product-card" data-category="fresh">
-            <img src="https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=900&q=80" alt="Frosted perfume bottle with silver details">
+          <article class="product-card" data-category="oud" data-name="Aestas Ruber" data-price="169">
+            <img src="./assets/products/aestas-ruber.png" alt="Parfum Aestas Ruber">
             <div class="product-info">
-              <h3>Velvet Neroli</h3>
-              <p>Italian bergamot, neroli, white musk</p>
+              <h3>Aestas Ruber</h3>
+              <p>Safran, dunkle Beeren und Oud-Holz.</p>
               <div class="product-meta">
-                <span>89 EUR</span>
-                <button class="add-btn">
+                <span>169 EUR</span>
+                <button class="add-btn" type="button">
                   <i data-lucide="plus"></i>
-                  Add
+                  In den Warenkorb
                 </button>
               </div>
             </div>
           </article>
 
-          <article class="product-card" data-category="amber">
-            <img src="https://images.unsplash.com/photo-1589782182703-2aaa69037b5b?auto=format&fit=crop&w=900&q=80" alt="Amber perfume bottle with warm light reflection">
+          <article class="product-card" data-category="fresh" data-name="Aestas Luna" data-price="149">
+            <img src="./assets/products/aestas-luna.png" alt="Parfum Aestas Luna">
             <div class="product-info">
-              <h3>Golden Resin</h3>
-              <p>Amber accord, vanilla bean, soft woods</p>
+              <h3>Aestas Luna</h3>
+              <p>Pudriger Moschus, Iris und sanfte Vanille.</p>
               <div class="product-meta">
-                <span>109 EUR</span>
-                <button class="add-btn">
+                <span>149 EUR</span>
+                <button class="add-btn" type="button">
                   <i data-lucide="plus"></i>
-                  Add
+                  In den Warenkorb
                 </button>
               </div>
             </div>
           </article>
 
-          <article class="product-card" data-category="oud">
-            <img src="https://images.unsplash.com/photo-1615529328331-f8917597711f?auto=format&fit=crop&w=900&q=80" alt="Dark perfume bottle with golden cap on stone surface">
+          <article class="product-card" data-category="amber" data-name="Aestas Aurum" data-price="179">
+            <img src="./assets/products/aestas-aurum.png" alt="Parfum Aestas Aurum">
             <div class="product-info">
-              <h3>Midnight Oud</h3>
-              <p>Laotian oud, saffron, smoked cedar</p>
+              <h3>Aestas Aurum</h3>
+              <p>Warmer Amber, Weihrauch und Goldgewuerze.</p>
               <div class="product-meta">
-                <span>135 EUR</span>
-                <button class="add-btn">
+                <span>179 EUR</span>
+                <button class="add-btn" type="button">
                   <i data-lucide="plus"></i>
-                  Add
+                  In den Warenkorb
                 </button>
               </div>
             </div>
           </article>
 
-          <article class="product-card" data-category="fresh">
-            <img src="https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=900&q=80" alt="Minimal clear perfume bottle with light beige background">
+          <article class="product-card" data-category="fresh" data-name="Aestas Stella" data-price="145">
+            <img src="./assets/products/aestas-stella.png" alt="Parfum Aestas Stella">
             <div class="product-info">
-              <h3>Silk Citrus</h3>
-              <p>Mandarin peel, petitgrain, clean vetiver</p>
+              <h3>Aestas Stella</h3>
+              <p>Lavendelbluete, weisser Moschus und Heliotrop.</p>
               <div class="product-meta">
-                <span>95 EUR</span>
-                <button class="add-btn">
+                <span>145 EUR</span>
+                <button class="add-btn" type="button">
                   <i data-lucide="plus"></i>
-                  Add
+                  In den Warenkorb
                 </button>
               </div>
             </div>
           </article>
 
-          <article class="product-card" data-category="amber">
-            <img src="https://images.unsplash.com/photo-1617897903246-719242758050?auto=format&fit=crop&w=900&q=80" alt="Elegant perfume bottle next to flowers">
+          <article class="product-card" data-category="fresh" data-name="Aestas Alba" data-price="139">
+            <img src="./assets/products/aestas-alba.png" alt="Parfum Aestas Alba">
             <div class="product-info">
-              <h3>Amber Veil</h3>
-              <p>Tonka absolute, iris petals, warm benzoin</p>
+              <h3>Aestas Alba</h3>
+              <p>Zitronenbluete, Neroli und Baumwollmoschus.</p>
               <div class="product-meta">
-                <span>119 EUR</span>
-                <button class="add-btn">
+                <span>139 EUR</span>
+                <button class="add-btn" type="button">
                   <i data-lucide="plus"></i>
-                  Add
+                  In den Warenkorb
                 </button>
               </div>
             </div>
           </article>
 
-          <article class="product-card" data-category="oud">
-            <img src="https://images.unsplash.com/photo-1595425970377-c9703cf48b6d?auto=format&fit=crop&w=900&q=80" alt="Luxury perfume bottle with dark and gold tones">
+          <article class="product-card" data-category="oud" data-name="Aestas Argentum" data-price="165">
+            <img src="./assets/products/aestas-argentum.png" alt="Parfum Aestas Argentum">
             <div class="product-info">
-              <h3>Royal Incense</h3>
-              <p>Frankincense tears, oud wood, black tea</p>
+              <h3>Aestas Argentum</h3>
+              <p>Mineralische Frische, Vetiver und Zedernholz.</p>
               <div class="product-meta">
-                <span>142 EUR</span>
-                <button class="add-btn">
+                <span>165 EUR</span>
+                <button class="add-btn" type="button">
                   <i data-lucide="plus"></i>
-                  Add
+                  In den Warenkorb
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-category="fresh" data-name="Aestas Flora" data-price="152">
+            <img src="./assets/products/aestas-flora.png" alt="Parfum Aestas Flora">
+            <div class="product-info">
+              <h3>Aestas Flora</h3>
+              <p>Pfingstrose, Jasmin und heller Moschus.</p>
+              <div class="product-meta">
+                <span>152 EUR</span>
+                <button class="add-btn" type="button">
+                  <i data-lucide="plus"></i>
+                  In den Warenkorb
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-category="fresh" data-name="Aestas Viridis" data-price="158">
+            <img src="./assets/products/aestas-viridis.png" alt="Parfum Aestas Viridis">
+            <div class="product-info">
+              <h3>Aestas Viridis</h3>
+              <p>Gruene Feige, Basilikum und frisches Vetiver.</p>
+              <div class="product-meta">
+                <span>158 EUR</span>
+                <button class="add-btn" type="button">
+                  <i data-lucide="plus"></i>
+                  In den Warenkorb
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-category="amber" data-name="Aestas Rosa" data-price="154">
+            <img src="./assets/products/aestas-rosa.png" alt="Parfum Aestas Rosa">
+            <div class="product-info">
+              <h3>Aestas Rosa</h3>
+              <p>Bulgarische Rose, Patchouli und weiche Vanille.</p>
+              <div class="product-meta">
+                <span>154 EUR</span>
+                <button class="add-btn" type="button">
+                  <i data-lucide="plus"></i>
+                  In den Warenkorb
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-category="amber" data-name="Aestas Solis" data-price="172">
+            <img src="./assets/products/aestas-collection.png" alt="Parfum Aestas Solis">
+            <div class="product-info">
+              <h3>Aestas Solis</h3>
+              <p>Amberharz, Mandarine und cremiges Sandelholz.</p>
+              <div class="product-meta">
+                <span>172 EUR</span>
+                <button class="add-btn" type="button">
+                  <i data-lucide="plus"></i>
+                  In den Warenkorb
                 </button>
               </div>
             </div>
@@ -180,19 +241,142 @@
       </div>
     </section>
 
+    <section class="manage-section" id="produkte">
+      <div class="container manage-grid">
+        <article class="manage-panel">
+          <p class="eyebrow">Produkte hinzufuegen</p>
+          <h2>Neues Produkt im Shop anlegen</h2>
+          <form id="addProductForm" class="form-grid">
+            <label class="form-field">
+              <span>Name</span>
+              <input type="text" name="name" required placeholder="z. B. Saffron Bloom">
+            </label>
+            <label class="form-field">
+              <span>Preis (EUR)</span>
+              <input type="number" name="price" min="1" step="0.01" required placeholder="129">
+            </label>
+            <label class="form-field">
+              <span>Kategorie</span>
+              <select name="category" required>
+                <option value="fresh">Frisch</option>
+                <option value="amber">Amber</option>
+                <option value="oud">Oud</option>
+              </select>
+            </label>
+            <label class="form-field">
+              <span>Bild (URL oder relativer Pfad)</span>
+              <input type="text" name="image" required placeholder="./assets/products/neues-produkt.png">
+            </label>
+            <label class="form-field full">
+              <span>Beschreibung</span>
+              <textarea name="description" rows="3" required placeholder="Kurze Produktbeschreibung"></textarea>
+            </label>
+            <div class="form-actions full">
+              <button class="btn btn-primary" type="submit">
+                <i data-lucide="plus-circle"></i>
+                Produkt hinzufuegen
+              </button>
+            </div>
+          </form>
+          <p class="form-status" id="productFormStatus" aria-live="polite"></p>
+        </article>
+
+        <article class="manage-panel">
+          <p class="eyebrow">Warenkorb</p>
+          <h2>Shop-Logik aktiv</h2>
+          <ul class="feature-list">
+            <li>Produkte koennen direkt in den Warenkorb gelegt werden.</li>
+            <li>Warenkorb zeigt Menge, Einzelpreis und Gesamtsumme.</li>
+            <li>Entfernen und Leeren-Funktion sind integriert.</li>
+            <li>Neue Produkte aus dem Formular werden sofort kaufbar.</li>
+          </ul>
+          <button class="btn btn-outline" id="openCartFromSection" type="button">
+            <i data-lucide="shopping-cart"></i>
+            Warenkorb anzeigen
+          </button>
+        </article>
+      </div>
+    </section>
+
+    <section class="map-section" id="filiale">
+      <div class="container map-layout">
+        <div>
+          <p class="eyebrow">Google Maps</p>
+          <h2>Adresse suchen und Karte anzeigen</h2>
+          <p class="map-copy">Gib eine Adresse ein. Die eingebettete Google-Maps-Karte springt direkt an den gesuchten Ort.</p>
+          <form class="map-search-form" id="mapSearchForm">
+            <label class="map-input-wrap" for="mapAddressInput">
+              <i data-lucide="map-pin"></i>
+              <input id="mapAddressInput" type="text" placeholder="z. B. Kurfuerstendamm 21, Berlin" required>
+            </label>
+            <button class="btn btn-primary" type="submit">Adresse suchen</button>
+          </form>
+        </div>
+        <iframe
+          id="mapFrame"
+          class="map-frame"
+          title="Google Maps Karte"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          src="https://www.google.com/maps?q=Berlin%20Mitte&output=embed"
+        ></iframe>
+      </div>
+    </section>
+
+    <section class="chat-section" id="chats">
+      <div class="container">
+        <div class="section-head chat-head">
+          <div>
+            <p class="eyebrow">Chat Systeme</p>
+            <h2>KI Chat Bot + Interner Support Chat</h2>
+          </div>
+        </div>
+        <div class="chat-grid">
+          <article class="chat-panel">
+            <div class="chat-panel-head">
+              <h3>KI Duftberater</h3>
+              <span class="status-pill status-ai">Online</span>
+            </div>
+            <div class="chat-messages" id="aiMessages">
+              <div class="chat-message bot">Hallo, ich helfe dir bei Duft-Empfehlungen. Frag mich z. B. nach frischen oder Oud-Dueften.</div>
+            </div>
+            <form class="chat-form" id="aiChatForm">
+              <input id="aiInput" type="text" placeholder="Nach Duft fragen..." required>
+              <button class="icon-btn submit-btn" type="submit" aria-label="An KI senden">
+                <i data-lucide="send"></i>
+              </button>
+            </form>
+          </article>
+
+          <article class="chat-panel">
+            <div class="chat-panel-head">
+              <h3>Interner Support Chat</h3>
+              <span class="status-pill status-support">Team aktiv</span>
+            </div>
+            <div class="chat-messages" id="supportMessages">
+              <div class="chat-message agent">Support: Willkommen, wir helfen bei Bestellungen, Versand und Retouren.</div>
+            </div>
+            <form class="chat-form" id="supportChatForm">
+              <input id="supportInput" type="text" placeholder="Nachricht an Support..." required>
+              <button class="icon-btn submit-btn" type="submit" aria-label="An Support senden">
+                <i data-lucide="send"></i>
+              </button>
+            </form>
+          </article>
+        </div>
+      </div>
+    </section>
+
     <section class="story-section" id="story">
       <div class="container story-grid">
-        <img src="https://images.unsplash.com/photo-1615368143753-2f2b5f4f0b95?auto=format&fit=crop&w=1200&q=80" alt="Perfume making setup with raw ingredients">
+        <img src="https://images.unsplash.com/photo-1615368143753-2f2b5f4f0b95?auto=format&fit=crop&w=1200&q=80" alt="Parfum-Labor mit Rohstoffen">
         <div class="story-text">
-          <p class="eyebrow">Our Story</p>
-          <h2>Crafted in small batches.</h2>
-          <p>
-            Each perfume is blended in a limited run and rested before bottling.
-            We focus on long-lasting compositions with balanced projection and a refined dry down.
-          </p>
-          <a href="#contact" class="btn btn-secondary">
+          <p class="eyebrow">Unsere Philosophie</p>
+          <h2>Kleine Chargen, hohe Qualitaet.</h2>
+          <p>Jeder Duft wird in limitierten Mengen produziert, damit jede Komposition konsistent und hochwertig bleibt.</p>
+          <a href="#contact" class="btn btn-story">
             <i data-lucide="mail"></i>
-            Contact Us
+            Kontakt
           </a>
         </div>
       </div>
@@ -203,22 +387,49 @@
     <div class="container footer-grid">
       <div>
         <h3>Aestas Parfumes</h3>
-        <p>Premium perfumes for modern everyday luxury.</p>
+        <p>Premium-Parfums fuer moderne Alltagsluxus-Momente.</p>
       </div>
       <div>
-        <h4>Visit</h4>
-        <p>Berlin, Germany</p>
+        <h4>Adresse</h4>
+        <p>Berlin, Deutschland</p>
       </div>
       <div>
-        <h4>Email</h4>
+        <h4>E-Mail</h4>
         <p>hello@aestasparfumes.com</p>
       </div>
       <div>
-        <h4>Phone</h4>
+        <h4>Telefon</h4>
         <p>+49 30 1234 5678</p>
       </div>
     </div>
   </footer>
+
+  <div class="drawer-backdrop" id="drawerBackdrop" hidden></div>
+  <aside class="cart-drawer" id="cartDrawer" aria-hidden="true">
+    <div class="cart-header">
+      <h3>Warenkorb</h3>
+      <button class="icon-btn small-btn" id="cartCloseBtn" type="button" aria-label="Warenkorb schliessen">
+        <i data-lucide="x"></i>
+      </button>
+    </div>
+
+    <ul class="cart-items" id="cartItems"></ul>
+    <p class="cart-empty" id="cartEmpty">Dein Warenkorb ist aktuell leer.</p>
+
+    <div class="cart-footer">
+      <p>Gesamtsumme: <strong id="cartTotal">0,00 EUR</strong></p>
+      <div class="cart-footer-actions">
+        <button class="btn btn-ghost" id="clearCartBtn" type="button">
+          <i data-lucide="trash-2"></i>
+          Leeren
+        </button>
+        <button class="btn btn-primary" id="checkoutBtn" type="button">
+          <i data-lucide="credit-card"></i>
+          Checkout
+        </button>
+      </div>
+    </div>
+  </aside>
 
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="./script.js"></script>
