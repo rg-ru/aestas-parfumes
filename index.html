@@ -8,18 +8,18 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css?v=20260603">
+  <link rel="stylesheet" href="./styles.css?v=20260603-2">
 </head>
 <body>
   <header class="site-header">
     <div class="container header-inner">
-      <a href="#" class="brand">Aestas Parfumes</a>
+      <a href="./index.html" class="brand">Aestas Parfumes</a>
       <nav class="site-nav" aria-label="Hauptnavigation">
-        <a href="#shop">Shop</a>
-        <a href="#produkte">Produkte</a>
-        <a href="#filiale">Filiale</a>
-        <a href="#chats">Chats</a>
-        <a href="#contact">Kontakt</a>
+        <a href="./index.html">Start</a>
+        <a href="./shop.html">Shop</a>
+        <a href="./filiale.html">Filiale</a>
+        <a href="./chats.html">Chats</a>
+        <a href="./projekt.html">Projekt</a>
       </nav>
       <div class="header-actions">
         <button class="icon-btn" id="searchFocusBtn" type="button" aria-label="Shop durchsuchen">
@@ -35,10 +35,11 @@
 
   <main>
     <section class="hero" id="collections">
+      <!-- Eigenleistung: Der Hero erklärt sofort Thema, Ziel und wichtigste Funktionen der Website. -->
       <img
         class="hero-image"
-        src="https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=1800&q=80"
-        alt="Luxuriöse Parfumflakons auf Tisch"
+        src="./assets/products/aestas-collection.png"
+        alt="Aestas Parfumes Produktkollektion"
       >
       <div class="hero-overlay"></div>
       <div class="container hero-content">
@@ -50,7 +51,7 @@
             <i data-lucide="sparkles"></i>
             Jetzt shoppen
           </a>
-          <a href="#filiale" class="btn btn-secondary">Filiale finden</a>
+          <a href="./projekt.html" class="btn btn-secondary">Projekt ansehen</a>
         </div>
       </div>
     </section>
@@ -107,7 +108,7 @@
 
         <div class="product-grid" id="productGrid">
           <article class="product-card" data-category="oud" data-name="Aestas Ruber" data-price="169">
-            <img src="./assets/products/aestas-ruber.png" alt="Parfum Aestas Ruber">
+            <img src="./assets/products/aestas-ruber.png" alt="Parfum Aestas Ruber" loading="lazy" decoding="async">
             <div class="product-info">
               <h3>Aestas Ruber</h3>
               <p>Safran, dunkle Beeren und Oud-Holz.</p>
@@ -122,7 +123,7 @@
           </article>
 
           <article class="product-card" data-category="fresh" data-name="Aestas Luna" data-price="149">
-            <img src="./assets/products/aestas-luna.png" alt="Parfum Aestas Luna">
+            <img src="./assets/products/aestas-luna.png" alt="Parfum Aestas Luna" loading="lazy" decoding="async">
             <div class="product-info">
               <h3>Aestas Luna</h3>
               <p>Pudriger Moschus, Iris und sanfte Vanille.</p>
@@ -137,7 +138,7 @@
           </article>
 
           <article class="product-card" data-category="amber" data-name="Aestas Aurum" data-price="179">
-            <img src="./assets/products/aestas-aurum.png" alt="Parfum Aestas Aurum">
+            <img src="./assets/products/aestas-aurum.png" alt="Parfum Aestas Aurum" loading="lazy" decoding="async">
             <div class="product-info">
               <h3>Aestas Aurum</h3>
               <p>Warmer Amber, Weihrauch und Goldgewürze.</p>
@@ -152,7 +153,7 @@
           </article>
 
           <article class="product-card" data-category="fresh" data-name="Aestas Stella" data-price="145">
-            <img src="./assets/products/aestas-stella.png" alt="Parfum Aestas Stella">
+            <img src="./assets/products/aestas-stella.png" alt="Parfum Aestas Stella" loading="lazy" decoding="async">
             <div class="product-info">
               <h3>Aestas Stella</h3>
               <p>Lavendelblüte, weißer Moschus und Heliotrop.</p>
@@ -167,7 +168,7 @@
           </article>
 
           <article class="product-card" data-category="fresh" data-name="Aestas Alba" data-price="139">
-            <img src="./assets/products/aestas-alba.png" alt="Parfum Aestas Alba">
+            <img src="./assets/products/aestas-alba.png" alt="Parfum Aestas Alba" loading="lazy" decoding="async">
             <div class="product-info">
               <h3>Aestas Alba</h3>
               <p>Zitronenblüte, Neroli und Baumwollmoschus.</p>
@@ -182,7 +183,7 @@
           </article>
 
           <article class="product-card" data-category="oud" data-name="Aestas Argentum" data-price="165">
-            <img src="./assets/products/aestas-argentum.png" alt="Parfum Aestas Argentum">
+            <img src="./assets/products/aestas-argentum.png" alt="Parfum Aestas Argentum" loading="lazy" decoding="async">
             <div class="product-info">
               <h3>Aestas Argentum</h3>
               <p>Mineralische Frische, Vetiver und Zedernholz.</p>
@@ -197,7 +198,7 @@
           </article>
 
           <article class="product-card" data-category="fresh" data-name="Aestas Flora" data-price="152">
-            <img src="./assets/products/aestas-flora.png" alt="Parfum Aestas Flora">
+            <img src="./assets/products/aestas-flora.png" alt="Parfum Aestas Flora" loading="lazy" decoding="async">
             <div class="product-info">
               <h3>Aestas Flora</h3>
               <p>Pfingstrose, Jasmin und heller Moschus.</p>
@@ -212,7 +213,7 @@
           </article>
 
           <article class="product-card" data-category="fresh" data-name="Aestas Viridis" data-price="158">
-            <img src="./assets/products/aestas-viridis.png" alt="Parfum Aestas Viridis">
+            <img src="./assets/products/aestas-viridis.png" alt="Parfum Aestas Viridis" loading="lazy" decoding="async">
             <div class="product-info">
               <h3>Aestas Viridis</h3>
               <p>Grüne Feige, Basilikum und frisches Vetiver.</p>
@@ -227,7 +228,7 @@
           </article>
 
           <article class="product-card" data-category="amber" data-name="Aestas Rosa" data-price="154">
-            <img src="./assets/products/aestas-rosa.png" alt="Parfum Aestas Rosa">
+            <img src="./assets/products/aestas-rosa.png" alt="Parfum Aestas Rosa" loading="lazy" decoding="async">
             <div class="product-info">
               <h3>Aestas Rosa</h3>
               <p>Bulgarische Rose, Patchouli und weiche Vanille.</p>
@@ -242,7 +243,7 @@
           </article>
 
           <article class="product-card" data-category="amber" data-name="Aestas Solis" data-price="172">
-            <img src="./assets/products/aestas-collection.png" alt="Parfum Aestas Solis">
+            <img src="./assets/products/aestas-collection.png" alt="Parfum Aestas Solis" loading="lazy" decoding="async">
             <div class="product-info">
               <h3>Aestas Solis</h3>
               <p>Amberharz, Mandarine und cremiges Sandelholz.</p>
@@ -387,7 +388,7 @@
 
     <section class="story-section" id="story">
       <div class="container story-grid">
-        <img src="https://images.unsplash.com/photo-1615368143753-2f2b5f4f0b95?auto=format&fit=crop&w=1200&q=80" alt="Parfum-Labor mit Rohstoffen">
+        <img src="./assets/products/aestas-aurum.png" alt="Aestas Aurum als Beispiel für warme Amber-Duftfamilien" loading="lazy" decoding="async">
         <div class="story-text">
           <p class="eyebrow">Unsere Philosophie</p>
           <h2>Kleine Chargen, hohe Qualität.</h2>
@@ -397,6 +398,17 @@
             Kontakt
           </a>
         </div>
+      </div>
+    </section>
+
+    <section class="source-section" aria-label="Kurzquellen">
+      <div class="container source-box">
+        <p class="eyebrow">Quellen</p>
+        <p>
+          Produktbilder: lokal im Projektordner. Externe Dienste: Google Fonts, Lucide Icons
+          und Google Maps. Details stehen auf der Projektseite.
+        </p>
+        <a href="./projekt.html#quellen">Quellen ansehen</a>
       </div>
     </section>
   </main>
@@ -423,6 +435,10 @@
       <div>
         <h4>Rechtliches</h4>
         <p><a href="./impressum.html">Impressum</a> · <a href="./datenschutz.html">Datenschutz</a></p>
+      </div>
+      <div>
+        <h4>Seiten</h4>
+        <p><a href="./shop.html">Shop</a> · <a href="./filiale.html">Filiale</a> · <a href="./projekt.html">Projekt</a></p>
       </div>
     </div>
   </footer>
@@ -455,6 +471,6 @@
   </aside>
 
   <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="./script.js?v=20260603"></script>
+  <script src="./script.js?v=20260603-2"></script>
 </body>
 </html>

@@ -42,6 +42,7 @@ let cart = loadFromStorage(CART_STORAGE_KEY, []);
 let activeFilter = "all";
 let activeSearch = "";
 
+// Eigenleistung: Die Antworten sind bewusst lokal, damit keine Chatdaten an einen Server gesendet werden.
 const supportReplies = {
   versand: "Support: Versand innerhalb Deutschlands dauert in der Regel 1-3 Werktage.",
   rueckgabe: "Support: Rückgaben sind innerhalb von 14 Tagen möglich.",
@@ -182,6 +183,7 @@ function renderCart() {
   saveToStorage(CART_STORAGE_KEY, cart);
 }
 
+// Eigenleistung: Warenkorb-Einträge werden nach Produktnamen zusammengefasst und lokal gespeichert.
 function addToCart(product) {
   const existingItem = cart.find((item) => item.name === product.name);
 
@@ -198,6 +200,7 @@ function addToCart(product) {
   renderCart();
 }
 
+// Eigenleistung: Kategorie-Filter und Suche wirken gleichzeitig auf die Produktkarten.
 function applyFilter() {
   const cards = Array.from(productGrid.querySelectorAll(".product-card"));
   cards.forEach((card) => {
@@ -405,6 +408,7 @@ addProductForm.addEventListener("submit", (event) => {
   const category = String(formData.get("category") || "").trim();
   const price = Number(String(formData.get("price") || "").replace(",", "."));
 
+  // Eingaben werden geprüft, bevor eine neue Produktkarte im DOM erstellt wird.
   if (!name || !description || !image || !category || !Number.isFinite(price) || price <= 0) {
     setProductFormStatus("Bitte alle Felder korrekt ausfüllen.", "error");
     return;
