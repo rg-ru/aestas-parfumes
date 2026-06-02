@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css?v=20260603-2">
+  <link rel="stylesheet" href="./styles.css?v=20260603-3">
 </head>
 <body>
   <header class="site-header">
@@ -100,6 +100,8 @@
           </label>
           <div class="filter-group" role="tablist" aria-label="Filter nach Duftfamilie">
             <button class="filter-btn active" type="button" data-filter="all">Alle</button>
+            <button class="filter-btn" type="button" data-filter="damen">Damen</button>
+            <button class="filter-btn" type="button" data-filter="herren">Herren</button>
             <button class="filter-btn" type="button" data-filter="fresh">Frisch</button>
             <button class="filter-btn" type="button" data-filter="amber">Amber</button>
             <button class="filter-btn" type="button" data-filter="oud">Oud</button>
@@ -107,9 +109,10 @@
         </div>
 
         <div class="product-grid" id="productGrid">
-          <article class="product-card" data-category="oud" data-name="Aestas Ruber" data-price="169">
+          <article class="product-card" data-category="oud" data-gender="herren" data-name="Aestas Ruber" data-price="169">
             <img src="./assets/products/aestas-ruber.png" alt="Parfum Aestas Ruber" loading="lazy" decoding="async">
             <div class="product-info">
+              <span class="gender-badge gender-men">Herren · eckiger Flakon</span>
               <h3>Aestas Ruber</h3>
               <p>Safran, dunkle Beeren und Oud-Holz.</p>
               <div class="product-meta">
@@ -122,9 +125,10 @@
             </div>
           </article>
 
-          <article class="product-card" data-category="fresh" data-name="Aestas Luna" data-price="149">
+          <article class="product-card" data-category="fresh" data-gender="damen" data-name="Aestas Luna" data-price="149">
             <img src="./assets/products/aestas-luna.png" alt="Parfum Aestas Luna" loading="lazy" decoding="async">
             <div class="product-info">
+              <span class="gender-badge gender-women">Damen · runder Flakon</span>
               <h3>Aestas Luna</h3>
               <p>Pudriger Moschus, Iris und sanfte Vanille.</p>
               <div class="product-meta">
@@ -137,9 +141,10 @@
             </div>
           </article>
 
-          <article class="product-card" data-category="amber" data-name="Aestas Aurum" data-price="179">
+          <article class="product-card" data-category="amber" data-gender="herren" data-name="Aestas Aurum" data-price="179">
             <img src="./assets/products/aestas-aurum.png" alt="Parfum Aestas Aurum" loading="lazy" decoding="async">
             <div class="product-info">
+              <span class="gender-badge gender-men">Herren · eckiger Flakon</span>
               <h3>Aestas Aurum</h3>
               <p>Warmer Amber, Weihrauch und Goldgewürze.</p>
               <div class="product-meta">
@@ -152,9 +157,10 @@
             </div>
           </article>
 
-          <article class="product-card" data-category="fresh" data-name="Aestas Stella" data-price="145">
+          <article class="product-card" data-category="fresh" data-gender="damen" data-name="Aestas Stella" data-price="145">
             <img src="./assets/products/aestas-stella.png" alt="Parfum Aestas Stella" loading="lazy" decoding="async">
             <div class="product-info">
+              <span class="gender-badge gender-women">Damen · runder Flakon</span>
               <h3>Aestas Stella</h3>
               <p>Lavendelblüte, weißer Moschus und Heliotrop.</p>
               <div class="product-meta">
@@ -167,9 +173,10 @@
             </div>
           </article>
 
-          <article class="product-card" data-category="fresh" data-name="Aestas Alba" data-price="139">
+          <article class="product-card" data-category="fresh" data-gender="damen" data-name="Aestas Alba" data-price="139">
             <img src="./assets/products/aestas-alba.png" alt="Parfum Aestas Alba" loading="lazy" decoding="async">
             <div class="product-info">
+              <span class="gender-badge gender-women">Damen · runder Flakon</span>
               <h3>Aestas Alba</h3>
               <p>Zitronenblüte, Neroli und Baumwollmoschus.</p>
               <div class="product-meta">
@@ -182,9 +189,10 @@
             </div>
           </article>
 
-          <article class="product-card" data-category="oud" data-name="Aestas Argentum" data-price="165">
+          <article class="product-card" data-category="oud" data-gender="herren" data-name="Aestas Argentum" data-price="165">
             <img src="./assets/products/aestas-argentum.png" alt="Parfum Aestas Argentum" loading="lazy" decoding="async">
             <div class="product-info">
+              <span class="gender-badge gender-men">Herren · eckiger Flakon</span>
               <h3>Aestas Argentum</h3>
               <p>Mineralische Frische, Vetiver und Zedernholz.</p>
               <div class="product-meta">
@@ -197,9 +205,10 @@
             </div>
           </article>
 
-          <article class="product-card" data-category="fresh" data-name="Aestas Flora" data-price="152">
+          <article class="product-card" data-category="fresh" data-gender="damen" data-name="Aestas Flora" data-price="152">
             <img src="./assets/products/aestas-flora.png" alt="Parfum Aestas Flora" loading="lazy" decoding="async">
             <div class="product-info">
+              <span class="gender-badge gender-women">Damen · runder Flakon</span>
               <h3>Aestas Flora</h3>
               <p>Pfingstrose, Jasmin und heller Moschus.</p>
               <div class="product-meta">
@@ -212,9 +221,10 @@
             </div>
           </article>
 
-          <article class="product-card" data-category="fresh" data-name="Aestas Viridis" data-price="158">
+          <article class="product-card" data-category="fresh" data-gender="herren" data-name="Aestas Viridis" data-price="158">
             <img src="./assets/products/aestas-viridis.png" alt="Parfum Aestas Viridis" loading="lazy" decoding="async">
             <div class="product-info">
+              <span class="gender-badge gender-men">Herren · eckiger Flakon</span>
               <h3>Aestas Viridis</h3>
               <p>Grüne Feige, Basilikum und frisches Vetiver.</p>
               <div class="product-meta">
@@ -227,9 +237,10 @@
             </div>
           </article>
 
-          <article class="product-card" data-category="amber" data-name="Aestas Rosa" data-price="154">
+          <article class="product-card" data-category="amber" data-gender="damen" data-name="Aestas Rosa" data-price="154">
             <img src="./assets/products/aestas-rosa.png" alt="Parfum Aestas Rosa" loading="lazy" decoding="async">
             <div class="product-info">
+              <span class="gender-badge gender-women">Damen · runder Flakon</span>
               <h3>Aestas Rosa</h3>
               <p>Bulgarische Rose, Patchouli und weiche Vanille.</p>
               <div class="product-meta">
@@ -242,9 +253,10 @@
             </div>
           </article>
 
-          <article class="product-card" data-category="amber" data-name="Aestas Solis" data-price="172">
+          <article class="product-card" data-category="amber" data-gender="herren" data-name="Aestas Solis" data-price="172">
             <img src="./assets/products/aestas-collection.png" alt="Parfum Aestas Solis" loading="lazy" decoding="async">
             <div class="product-info">
+              <span class="gender-badge gender-men">Herren · eckiger Flakon</span>
               <h3>Aestas Solis</h3>
               <p>Amberharz, Mandarine und cremiges Sandelholz.</p>
               <div class="product-meta">
@@ -280,6 +292,13 @@
                 <option value="fresh">Frisch</option>
                 <option value="amber">Amber</option>
                 <option value="oud">Oud</option>
+              </select>
+            </label>
+            <label class="form-field">
+              <span>Einteilung</span>
+              <select name="gender" required>
+                <option value="damen">Damen (runder Flakon)</option>
+                <option value="herren">Herren (eckiger Flakon)</option>
               </select>
             </label>
             <label class="form-field">
@@ -471,6 +490,6 @@
   </aside>
 
   <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="./script.js?v=20260603-2"></script>
+  <script src="./script.js?v=20260603-3"></script>
 </body>
 </html>

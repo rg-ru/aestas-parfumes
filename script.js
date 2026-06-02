@@ -204,7 +204,8 @@ function addToCart(product) {
 function applyFilter() {
   const cards = Array.from(productGrid.querySelectorAll(".product-card"));
   cards.forEach((card) => {
-    const matchesCategory = activeFilter === "all" || card.dataset.category === activeFilter;
+    const matchesCategory =
+      activeFilter === "all" || card.dataset.category === activeFilter || card.dataset.gender === activeFilter;
     const searchableText = `${card.dataset.name || ""} ${card.textContent || ""}`.toLowerCase();
     const matchesSearch = !activeSearch || searchableText.includes(activeSearch);
     const visible = matchesCategory && matchesSearch;
@@ -220,10 +221,11 @@ function setProductFormStatus(message, type) {
   }
 }
 
-function createProductCard({ name, price, category, image, description }) {
+function createProductCard({ name, price, category, gender, image, description }) {
   const card = document.createElement("article");
   card.className = "product-card";
   card.dataset.category = category;
+  card.dataset.gender = gender;
   card.dataset.name = name;
   card.dataset.price = String(price);
 
@@ -233,6 +235,10 @@ function createProductCard({ name, price, category, image, description }) {
 
   const info = document.createElement("div");
   info.className = "product-info";
+
+  const badge = document.createElement("span");
+  badge.className = `gender-badge ${gender === "herren" ? "gender-men" : "gender-women"}`;
+  badge.textContent = gender === "herren" ? "Herren · eckiger Flakon" : "Damen · runder Flakon";
 
   const title = document.createElement("h3");
   title.textContent = name;
@@ -252,7 +258,7 @@ function createProductCard({ name, price, category, image, description }) {
   addButton.innerHTML = '<i data-lucide="plus"></i>In den Warenkorb';
 
   meta.append(priceEl, addButton);
-  info.append(title, copy, meta);
+  info.append(badge, title, copy, meta);
   card.append(imageEl, info);
   return card;
 }
@@ -406,10 +412,11 @@ addProductForm.addEventListener("submit", (event) => {
   const description = String(formData.get("description") || "").trim();
   const image = String(formData.get("image") || "").trim();
   const category = String(formData.get("category") || "").trim();
+  const gender = String(formData.get("gender") || "").trim();
   const price = Number(String(formData.get("price") || "").replace(",", "."));
 
   // Eingaben werden geprüft, bevor eine neue Produktkarte im DOM erstellt wird.
-  if (!name || !description || !image || !category || !Number.isFinite(price) || price <= 0) {
+  if (!name || !description || !image || !category || !gender || !Number.isFinite(price) || price <= 0) {
     setProductFormStatus("Bitte alle Felder korrekt ausfüllen.", "error");
     return;
   }
@@ -418,12 +425,13 @@ addProductForm.addEventListener("submit", (event) => {
     name,
     price,
     category,
+    gender,
     image,
     description,
   });
 
   productGrid.appendChild(card);
-  saveCustomProduct({ name, price, category, image, description });
+  saveCustomProduct({ name, price, category, gender, image, description });
   addProductForm.reset();
   setProductFormStatus(`Produkt "${name}" wurde hinzugefügt.`, "success");
   applyFilter();
