@@ -54,7 +54,7 @@ const currencyFormatter = new Intl.NumberFormat("de-DE", {
 const CART_STORAGE_KEY = "aestas_cart";
 const PRODUCTS_STORAGE_KEY = "aestas_custom_products";
 
-let cart = loadFromStorage(CART_STORAGE_KEY, []);
+let cart = normalizeCart(loadFromStorage(CART_STORAGE_KEY, []));
 let activeFilter = "all";
 let activeSearch = "";
 let selectedProduct = null;
@@ -68,6 +68,45 @@ const supportReplies = {
   bestellung: "Support: Sende uns bitte deine Bestellnummer, dann prüfen wir den Status sofort.",
   standard: "Support: Danke für die Nachricht. Ein Teammitglied meldet sich zeitnah mit Details.",
 };
+
+const aiReplies = [
+  {
+    keywords: ["herren", "mann", "männer", "eckig", "eckigen"],
+    text: "Für Herren empfehle ich die eckigen Flakons: Aestas Ruber, Aurum, Argentum, Viridis und Solis.",
+  },
+  {
+    keywords: ["damen", "frau", "frauen", "rund", "runden"],
+    text: "Für Damen passen die runden Flakons: Aestas Luna, Stella, Alba, Flora und Rosa.",
+  },
+  {
+    keywords: ["oud", "intensiv", "stark"],
+    text: "Wenn du einen intensiven Duft suchst, passen Aestas Ruber oder Aestas Argentum besonders gut.",
+  },
+  {
+    keywords: ["frisch", "fresh", "leicht", "sommer"],
+    text: "Für frische Düfte empfehle ich Aestas Alba, Aestas Luna oder Aestas Viridis.",
+  },
+  {
+    keywords: ["rose", "rosa", "blume", "floral"],
+    text: "Wenn du florale Düfte magst, schau dir Aestas Rosa und Aestas Flora an.",
+  },
+  {
+    keywords: ["haltbar", "haltbarkeit", "lange"],
+    text: "Sehr gute Haltbarkeit liefern vor allem Aestas Ruber, Aestas Aurum und Aestas Solis.",
+  },
+  {
+    keywords: ["geschenk", "geburtstag"],
+    text: "Als Geschenk sind Aestas Luna für Damen und Aestas Solis für Herren gute, elegante Optionen.",
+  },
+  {
+    keywords: ["größe", "groesse", "ml", "inhalt"],
+    text: "Die Größen stehen in den Produktdetails. Klicke bei einem Parfum auf 'Mehr Infos', dann siehst du Größe, Konzentration, Duftnoten und Inhaltsstoffe.",
+  },
+  {
+    keywords: ["warenkorb", "korb", "kaufen"],
+    text: "Du kannst ein Parfum über 'In den Warenkorb' hinzufügen. Im Warenkorb kannst du Mengen ändern oder Artikel entfernen.",
+  },
+];
 
 function syncIcons() {
   // Lucide ersetzt die data-lucide-Platzhalter durch echte SVG-Icons.
@@ -93,6 +132,31 @@ function loadFromStorage(key, fallbackValue) {
 function saveToStorage(key, value) {
   // Arrays wie Warenkorb und eigene Produkte werden als JSON-Text gespeichert.
   localStorage.setItem(key, JSON.stringify(value));
+}
+
+function normalizeCart(rawCart) {
+  const cleaned = [];
+  rawCart.forEach((item) => {
+    const name = String(item.name || "").trim();
+    const price = Number(item.price);
+    const quantity = Number(item.quantity);
+
+    if (!name || !Number.isFinite(price) || price <= 0 || !Number.isFinite(quantity) || quantity <= 0) {
+      return;
+    }
+
+    const existingItem = cleaned.find((entry) => entry.name === name);
+    if (existingItem) {
+      existingItem.quantity += Math.round(quantity);
+    } else {
+      cleaned.push({
+        name,
+        price,
+        quantity: Math.round(quantity),
+      });
+    }
+  });
+  return cleaned;
 }
 
 function formatEur(value) {
@@ -263,6 +327,10 @@ function renderCart() {
 
 // Eigenleistung: Warenkorb-Einträge werden nach Produktnamen zusammengefasst und lokal gespeichert.
 function addToCart(product) {
+  if (!product?.name || !Number.isFinite(product.price) || product.price <= 0) {
+    return;
+  }
+
   const existingItem = cart.find((item) => item.name === product.name);
 
   if (existingItem) {
@@ -382,23 +450,13 @@ function appendChatMessage(container, text, role) {
 function getAiReply(userMessage) {
   // Einfache lokale Wenn-Dann-Logik fuer Duftempfehlungen.
   const text = userMessage.toLowerCase();
+  const reply = aiReplies.find((entry) => entry.keywords.some((keyword) => text.includes(keyword)));
 
-  if (text.includes("oud")) {
-    return "Für Oud-Liebhaber passen Aestas Ruber und Aestas Argentum besonders gut.";
+  if (reply) {
+    return reply.text;
   }
-  if (text.includes("frisch") || text.includes("fresh")) {
-    return "Für frische Düfte empfehle ich Aestas Alba, Aestas Luna oder Aestas Viridis.";
-  }
-  if (text.includes("rose") || text.includes("rosa") || text.includes("blume") || text.includes("floral")) {
-    return "Wenn du florale Düfte magst, schau dir Aestas Rosa und Aestas Flora an.";
-  }
-  if (text.includes("haltbar") || text.includes("haltbarkeit")) {
-    return "Sehr gute Haltbarkeit liefern vor allem Aestas Ruber, Aestas Aurum und Aestas Solis.";
-  }
-  if (text.includes("geschenk")) {
-    return "Als Geschenk werden oft Aestas Luna und Aestas Solis gewählt.";
-  }
-  return "Sag mir gern, ob du eher frisch, warm oder intensiv magst. Dann gebe ich dir eine präzise Empfehlung.";
+
+  return "Sag mir gern, ob du einen Damen- oder Herrenduft suchst und ob er frisch, warm oder intensiv sein soll. Dann gebe ich dir eine passende Empfehlung.";
 }
 
 function getSupportReply(userMessage) {
