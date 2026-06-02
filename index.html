@@ -8,9 +8,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css?v=20260603-3">
+  <link rel="stylesheet" href="./styles.css?v=20260603-4">
 </head>
 <body>
+  <a class="skip-link" href="#shop">Direkt zum Shop springen</a>
   <header class="site-header">
     <div class="container header-inner">
       <a href="./index.html" class="brand">Aestas Parfumes</a>
@@ -109,7 +110,7 @@
         </div>
 
         <div class="product-grid" id="productGrid">
-          <article class="product-card" data-category="oud" data-gender="herren" data-name="Aestas Ruber" data-price="169">
+          <article class="product-card" data-category="oud" data-gender="herren" data-name="Aestas Ruber" data-price="169" data-size="100 ml" data-concentration="Eau de Parfum" data-notes="Safran, dunkle Beeren, Oud-Holz, Leder" data-ingredients="Alcohol Denat., Parfum, Aqua, Limonene, Linalool">
             <img src="./assets/products/aestas-ruber.png" alt="Parfum Aestas Ruber" loading="lazy" decoding="async">
             <div class="product-info">
               <span class="gender-badge gender-men">Herren · eckiger Flakon</span>
@@ -117,7 +118,8 @@
               <p>Safran, dunkle Beeren und Oud-Holz.</p>
               <div class="product-meta">
                 <span>169 EUR</span>
-                <button class="add-btn" type="button">
+                <button class="detail-btn" type="button">Mehr Infos</button>
+                <button class="add-btn" type="button" aria-label="Aestas Ruber in den Warenkorb legen">
                   <i data-lucide="plus"></i>
                   In den Warenkorb
                 </button>
@@ -125,7 +127,7 @@
             </div>
           </article>
 
-          <article class="product-card" data-category="fresh" data-gender="damen" data-name="Aestas Luna" data-price="149">
+          <article class="product-card" data-category="fresh" data-gender="damen" data-name="Aestas Luna" data-price="149" data-size="75 ml" data-concentration="Eau de Parfum" data-notes="Iris, weißer Moschus, Vanille, Puderakkord" data-ingredients="Alcohol Denat., Parfum, Aqua, Linalool, Citronellol">
             <img src="./assets/products/aestas-luna.png" alt="Parfum Aestas Luna" loading="lazy" decoding="async">
             <div class="product-info">
               <span class="gender-badge gender-women">Damen · runder Flakon</span>
@@ -133,7 +135,8 @@
               <p>Pudriger Moschus, Iris und sanfte Vanille.</p>
               <div class="product-meta">
                 <span>149 EUR</span>
-                <button class="add-btn" type="button">
+                <button class="detail-btn" type="button">Mehr Infos</button>
+                <button class="add-btn" type="button" aria-label="Aestas Luna in den Warenkorb legen">
                   <i data-lucide="plus"></i>
                   In den Warenkorb
                 </button>
@@ -141,7 +144,7 @@
             </div>
           </article>
 
-          <article class="product-card" data-category="amber" data-gender="herren" data-name="Aestas Aurum" data-price="179">
+          <article class="product-card" data-category="amber" data-gender="herren" data-name="Aestas Aurum" data-price="179" data-size="100 ml" data-concentration="Extrait de Parfum" data-notes="Amber, Weihrauch, Goldgewürze, Sandelholz" data-ingredients="Alcohol Denat., Parfum, Aqua, Coumarin, Benzyl Salicylate">
             <img src="./assets/products/aestas-aurum.png" alt="Parfum Aestas Aurum" loading="lazy" decoding="async">
             <div class="product-info">
               <span class="gender-badge gender-men">Herren · eckiger Flakon</span>
@@ -149,7 +152,8 @@
               <p>Warmer Amber, Weihrauch und Goldgewürze.</p>
               <div class="product-meta">
                 <span>179 EUR</span>
-                <button class="add-btn" type="button">
+                <button class="detail-btn" type="button">Mehr Infos</button>
+                <button class="add-btn" type="button" aria-label="Aestas Aurum in den Warenkorb legen">
                   <i data-lucide="plus"></i>
                   In den Warenkorb
                 </button>
@@ -157,7 +161,7 @@
             </div>
           </article>
 
-          <article class="product-card" data-category="fresh" data-gender="damen" data-name="Aestas Stella" data-price="145">
+          <article class="product-card" data-category="fresh" data-gender="damen" data-name="Aestas Stella" data-price="145" data-size="75 ml" data-concentration="Eau de Parfum" data-notes="Lavendelblüte, Heliotrop, weißer Moschus" data-ingredients="Alcohol Denat., Parfum, Aqua, Geraniol, Limonene">
             <img src="./assets/products/aestas-stella.png" alt="Parfum Aestas Stella" loading="lazy" decoding="async">
             <div class="product-info">
               <span class="gender-badge gender-women">Damen · runder Flakon</span>
@@ -165,7 +169,8 @@
               <p>Lavendelblüte, weißer Moschus und Heliotrop.</p>
               <div class="product-meta">
                 <span>145 EUR</span>
-                <button class="add-btn" type="button">
+                <button class="detail-btn" type="button">Mehr Infos</button>
+                <button class="add-btn" type="button" aria-label="Aestas Stella in den Warenkorb legen">
                   <i data-lucide="plus"></i>
                   In den Warenkorb
                 </button>
@@ -173,7 +178,7 @@
             </div>
           </article>
 
-          <article class="product-card" data-category="fresh" data-gender="damen" data-name="Aestas Alba" data-price="139">
+          <article class="product-card" data-category="fresh" data-gender="damen" data-name="Aestas Alba" data-price="139" data-size="50 ml" data-concentration="Eau de Toilette" data-notes="Zitronenblüte, Neroli, Baumwollmoschus" data-ingredients="Alcohol Denat., Parfum, Aqua, Citral, Limonene">
             <img src="./assets/products/aestas-alba.png" alt="Parfum Aestas Alba" loading="lazy" decoding="async">
             <div class="product-info">
               <span class="gender-badge gender-women">Damen · runder Flakon</span>
@@ -181,7 +186,8 @@
               <p>Zitronenblüte, Neroli und Baumwollmoschus.</p>
               <div class="product-meta">
                 <span>139 EUR</span>
-                <button class="add-btn" type="button">
+                <button class="detail-btn" type="button">Mehr Infos</button>
+                <button class="add-btn" type="button" aria-label="Aestas Alba in den Warenkorb legen">
                   <i data-lucide="plus"></i>
                   In den Warenkorb
                 </button>
@@ -189,7 +195,7 @@
             </div>
           </article>
 
-          <article class="product-card" data-category="oud" data-gender="herren" data-name="Aestas Argentum" data-price="165">
+          <article class="product-card" data-category="oud" data-gender="herren" data-name="Aestas Argentum" data-price="165" data-size="100 ml" data-concentration="Eau de Parfum" data-notes="Vetiver, Zedernholz, mineralische Frische, Moschus" data-ingredients="Alcohol Denat., Parfum, Aqua, Linalool, Alpha-Isomethyl Ionone">
             <img src="./assets/products/aestas-argentum.png" alt="Parfum Aestas Argentum" loading="lazy" decoding="async">
             <div class="product-info">
               <span class="gender-badge gender-men">Herren · eckiger Flakon</span>
@@ -197,7 +203,8 @@
               <p>Mineralische Frische, Vetiver und Zedernholz.</p>
               <div class="product-meta">
                 <span>165 EUR</span>
-                <button class="add-btn" type="button">
+                <button class="detail-btn" type="button">Mehr Infos</button>
+                <button class="add-btn" type="button" aria-label="Aestas Argentum in den Warenkorb legen">
                   <i data-lucide="plus"></i>
                   In den Warenkorb
                 </button>
@@ -205,7 +212,7 @@
             </div>
           </article>
 
-          <article class="product-card" data-category="fresh" data-gender="damen" data-name="Aestas Flora" data-price="152">
+          <article class="product-card" data-category="fresh" data-gender="damen" data-name="Aestas Flora" data-price="152" data-size="75 ml" data-concentration="Eau de Parfum" data-notes="Pfingstrose, Jasmin, heller Moschus, Birne" data-ingredients="Alcohol Denat., Parfum, Aqua, Benzyl Alcohol, Citronellol">
             <img src="./assets/products/aestas-flora.png" alt="Parfum Aestas Flora" loading="lazy" decoding="async">
             <div class="product-info">
               <span class="gender-badge gender-women">Damen · runder Flakon</span>
@@ -213,7 +220,8 @@
               <p>Pfingstrose, Jasmin und heller Moschus.</p>
               <div class="product-meta">
                 <span>152 EUR</span>
-                <button class="add-btn" type="button">
+                <button class="detail-btn" type="button">Mehr Infos</button>
+                <button class="add-btn" type="button" aria-label="Aestas Flora in den Warenkorb legen">
                   <i data-lucide="plus"></i>
                   In den Warenkorb
                 </button>
@@ -221,7 +229,7 @@
             </div>
           </article>
 
-          <article class="product-card" data-category="fresh" data-gender="herren" data-name="Aestas Viridis" data-price="158">
+          <article class="product-card" data-category="fresh" data-gender="herren" data-name="Aestas Viridis" data-price="158" data-size="100 ml" data-concentration="Eau de Parfum" data-notes="Grüne Feige, Basilikum, Vetiver, Bergamotte" data-ingredients="Alcohol Denat., Parfum, Aqua, Citral, Linalool">
             <img src="./assets/products/aestas-viridis.png" alt="Parfum Aestas Viridis" loading="lazy" decoding="async">
             <div class="product-info">
               <span class="gender-badge gender-men">Herren · eckiger Flakon</span>
@@ -229,7 +237,8 @@
               <p>Grüne Feige, Basilikum und frisches Vetiver.</p>
               <div class="product-meta">
                 <span>158 EUR</span>
-                <button class="add-btn" type="button">
+                <button class="detail-btn" type="button">Mehr Infos</button>
+                <button class="add-btn" type="button" aria-label="Aestas Viridis in den Warenkorb legen">
                   <i data-lucide="plus"></i>
                   In den Warenkorb
                 </button>
@@ -237,7 +246,7 @@
             </div>
           </article>
 
-          <article class="product-card" data-category="amber" data-gender="damen" data-name="Aestas Rosa" data-price="154">
+          <article class="product-card" data-category="amber" data-gender="damen" data-name="Aestas Rosa" data-price="154" data-size="75 ml" data-concentration="Eau de Parfum" data-notes="Bulgarische Rose, Patchouli, Vanille, Himbeere" data-ingredients="Alcohol Denat., Parfum, Aqua, Geraniol, Citronellol">
             <img src="./assets/products/aestas-rosa.png" alt="Parfum Aestas Rosa" loading="lazy" decoding="async">
             <div class="product-info">
               <span class="gender-badge gender-women">Damen · runder Flakon</span>
@@ -245,7 +254,8 @@
               <p>Bulgarische Rose, Patchouli und weiche Vanille.</p>
               <div class="product-meta">
                 <span>154 EUR</span>
-                <button class="add-btn" type="button">
+                <button class="detail-btn" type="button">Mehr Infos</button>
+                <button class="add-btn" type="button" aria-label="Aestas Rosa in den Warenkorb legen">
                   <i data-lucide="plus"></i>
                   In den Warenkorb
                 </button>
@@ -253,7 +263,7 @@
             </div>
           </article>
 
-          <article class="product-card" data-category="amber" data-gender="herren" data-name="Aestas Solis" data-price="172">
+          <article class="product-card" data-category="amber" data-gender="herren" data-name="Aestas Solis" data-price="172" data-size="100 ml" data-concentration="Extrait de Parfum" data-notes="Amberharz, Mandarine, Sandelholz, Tonkabohne" data-ingredients="Alcohol Denat., Parfum, Aqua, Coumarin, Limonene">
             <img src="./assets/products/aestas-collection.png" alt="Parfum Aestas Solis" loading="lazy" decoding="async">
             <div class="product-info">
               <span class="gender-badge gender-men">Herren · eckiger Flakon</span>
@@ -261,7 +271,8 @@
               <p>Amberharz, Mandarine und cremiges Sandelholz.</p>
               <div class="product-meta">
                 <span>172 EUR</span>
-                <button class="add-btn" type="button">
+                <button class="detail-btn" type="button">Mehr Infos</button>
+                <button class="add-btn" type="button" aria-label="Aestas Solis in den Warenkorb legen">
                   <i data-lucide="plus"></i>
                   In den Warenkorb
                 </button>
@@ -463,6 +474,55 @@
   </footer>
 
   <div class="drawer-backdrop" id="drawerBackdrop" hidden></div>
+  <div class="modal-backdrop" id="productModalBackdrop" hidden></div>
+  <section
+    class="product-modal"
+    id="productModal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="productModalTitle"
+    aria-describedby="productModalDescription"
+    aria-hidden="true"
+  >
+    <div class="product-modal-head">
+      <div>
+        <p class="eyebrow">Produktdetails</p>
+        <h3 id="productModalTitle">Parfum</h3>
+      </div>
+      <button class="icon-btn small-btn" id="productModalClose" type="button" aria-label="Produktdetails schließen">
+        <i data-lucide="x"></i>
+      </button>
+    </div>
+    <img id="productModalImage" class="product-modal-image" src="./assets/products/aestas-luna.png" alt="">
+    <p id="productModalDescription" class="product-modal-copy"></p>
+    <dl class="product-detail-list">
+      <div>
+        <dt>Größe</dt>
+        <dd id="productModalSize"></dd>
+      </div>
+      <div>
+        <dt>Konzentration</dt>
+        <dd id="productModalConcentration"></dd>
+      </div>
+      <div>
+        <dt>Einteilung</dt>
+        <dd id="productModalGender"></dd>
+      </div>
+      <div>
+        <dt>Duftnoten</dt>
+        <dd id="productModalNotes"></dd>
+      </div>
+      <div>
+        <dt>Inhaltsstoffe</dt>
+        <dd id="productModalIngredients"></dd>
+      </div>
+    </dl>
+    <button class="btn btn-primary" id="productModalCartBtn" type="button">
+      <i data-lucide="shopping-cart"></i>
+      In den Warenkorb
+    </button>
+  </section>
+
   <aside class="cart-drawer" id="cartDrawer" aria-hidden="true">
     <div class="cart-header">
       <h3>Warenkorb</h3>
@@ -490,6 +550,6 @@
   </aside>
 
   <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="./script.js?v=20260603-3"></script>
+  <script src="./script.js?v=20260603-4"></script>
 </body>
 </html>

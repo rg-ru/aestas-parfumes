@@ -15,6 +15,19 @@ const cartTotalEl = document.getElementById("cartTotal");
 const clearCartBtn = document.getElementById("clearCartBtn");
 const checkoutBtn = document.getElementById("checkoutBtn");
 
+const productModal = document.getElementById("productModal");
+const productModalBackdrop = document.getElementById("productModalBackdrop");
+const productModalClose = document.getElementById("productModalClose");
+const productModalCartBtn = document.getElementById("productModalCartBtn");
+const productModalTitle = document.getElementById("productModalTitle");
+const productModalDescription = document.getElementById("productModalDescription");
+const productModalImage = document.getElementById("productModalImage");
+const productModalSize = document.getElementById("productModalSize");
+const productModalConcentration = document.getElementById("productModalConcentration");
+const productModalGender = document.getElementById("productModalGender");
+const productModalNotes = document.getElementById("productModalNotes");
+const productModalIngredients = document.getElementById("productModalIngredients");
+
 const addProductForm = document.getElementById("addProductForm");
 const productFormStatus = document.getElementById("productFormStatus");
 
@@ -41,6 +54,8 @@ const PRODUCTS_STORAGE_KEY = "aestas_custom_products";
 let cart = loadFromStorage(CART_STORAGE_KEY, []);
 let activeFilter = "all";
 let activeSearch = "";
+let selectedProduct = null;
+let lastFocusedElement = null;
 
 // Eigenleistung: Die Antworten sind bewusst lokal, damit keine Chatdaten an einen Server gesendet werden.
 const supportReplies = {
@@ -95,6 +110,20 @@ function setDrawerOpen(open) {
   document.body.classList.toggle("no-scroll", open);
 }
 
+function setProductModalOpen(open) {
+  productModal.classList.toggle("open", open);
+  productModal.setAttribute("aria-hidden", open ? "false" : "true");
+  productModalBackdrop.classList.toggle("open", open);
+  productModalBackdrop.hidden = !open;
+  document.body.classList.toggle("no-scroll", open);
+
+  if (open) {
+    productModalClose.focus();
+  } else if (lastFocusedElement) {
+    lastFocusedElement.focus();
+  }
+}
+
 function getCardData(card) {
   const nameFromDataset = card.dataset.name;
   const priceFromDataset = Number(card.dataset.price);
@@ -107,6 +136,42 @@ function getCardData(card) {
 
   const fallbackPriceText = card.querySelector(".product-meta span")?.textContent || "0";
   return { name, price: parsePrice(fallbackPriceText) };
+}
+
+function getProductDetails(card) {
+  const image = card.querySelector("img");
+  const description = card.querySelector(".product-info p")?.textContent?.trim() || "";
+  const genderText = card.dataset.gender === "herren" ? "Herrenparfum, eckiger Flakon" : "Damenparfum, runder Flakon";
+
+  return {
+    ...getCardData(card),
+    description,
+    image: image?.getAttribute("src") || "",
+    imageAlt: image?.getAttribute("alt") || "",
+    size: card.dataset.size || "75 ml",
+    concentration: card.dataset.concentration || "Eau de Parfum",
+    genderText,
+    notes: card.dataset.notes || description,
+    ingredients: card.dataset.ingredients || "Alcohol Denat., Parfum, Aqua",
+  };
+}
+
+function openProductDetails(card) {
+  selectedProduct = getProductDetails(card);
+  lastFocusedElement = document.activeElement;
+
+  productModalTitle.textContent = selectedProduct.name;
+  productModalDescription.textContent = selectedProduct.description;
+  productModalImage.src = selectedProduct.image;
+  productModalImage.alt = selectedProduct.imageAlt;
+  productModalSize.textContent = selectedProduct.size;
+  productModalConcentration.textContent = selectedProduct.concentration;
+  productModalGender.textContent = selectedProduct.genderText;
+  productModalNotes.textContent = selectedProduct.notes;
+  productModalIngredients.textContent = selectedProduct.ingredients;
+  productModalCartBtn.setAttribute("aria-label", `${selectedProduct.name} in den Warenkorb legen`);
+
+  setProductModalOpen(true);
 }
 
 function renderCart() {
@@ -228,7 +293,10 @@ function createProductCard({ name, price, category, gender, image, description }
   card.dataset.gender = gender;
   card.dataset.name = name;
   card.dataset.price = String(price);
-
+  card.dataset.size = "75 ml";
+  card.dataset.concentration = "Eau de Parfum";
+  card.dataset.notes = description;
+  card.dataset.ingredients = "Alcohol Denat., Parfum, Aqua";
   const imageEl = document.createElement("img");
   imageEl.src = image;
   imageEl.alt = `Parfum ${name}`;
@@ -252,12 +320,18 @@ function createProductCard({ name, price, category, gender, image, description }
   const priceEl = document.createElement("span");
   priceEl.textContent = `${Math.round(price * 100) / 100} EUR`;
 
+  const detailButton = document.createElement("button");
+  detailButton.className = "detail-btn";
+  detailButton.type = "button";
+  detailButton.textContent = "Mehr Infos";
+
   const addButton = document.createElement("button");
   addButton.className = "add-btn";
   addButton.type = "button";
+  addButton.setAttribute("aria-label", `${name} in den Warenkorb legen`);
   addButton.innerHTML = '<i data-lucide="plus"></i>In den Warenkorb';
 
-  meta.append(priceEl, addButton);
+  meta.append(priceEl, detailButton, addButton);
   info.append(badge, title, copy, meta);
   card.append(imageEl, info);
   return card;
@@ -319,17 +393,22 @@ function getSupportReply(userMessage) {
 
 productGrid.addEventListener("click", (event) => {
   const addButton = event.target.closest(".add-btn");
-  if (!addButton) {
-    return;
-  }
-
-  const card = addButton.closest(".product-card");
+  const detailButton = event.target.closest(".detail-btn");
+  const card = event.target.closest(".product-card");
   if (!card) {
     return;
   }
 
-  const product = getCardData(card);
-  addToCart(product);
+  if (addButton) {
+    const product = getCardData(card);
+    addToCart(product);
+    return;
+  }
+
+  if (detailButton || !event.target.closest("button")) {
+    openProductDetails(card);
+    return;
+  }
 });
 
 filterButtons.forEach((button) => {
@@ -398,9 +477,24 @@ cartCloseBtn.addEventListener("click", () => setDrawerOpen(false));
 drawerBackdrop.addEventListener("click", () => setDrawerOpen(false));
 
 document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && productModal.classList.contains("open")) {
+    setProductModalOpen(false);
+    return;
+  }
   if (event.key === "Escape") {
     setDrawerOpen(false);
   }
+});
+
+productModalClose.addEventListener("click", () => setProductModalOpen(false));
+productModalBackdrop.addEventListener("click", () => setProductModalOpen(false));
+productModalCartBtn.addEventListener("click", () => {
+  if (!selectedProduct) {
+    return;
+  }
+  addToCart({ name: selectedProduct.name, price: selectedProduct.price });
+  setProductModalOpen(false);
+  setDrawerOpen(true);
 });
 
 addProductForm.addEventListener("submit", (event) => {
