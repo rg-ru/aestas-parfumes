@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aestas Parfumes | Perfume Boutique</title>
-  <meta name="description" content="Moderner Online-Shop für Parfums mit Warenkorb, Produktverwaltung, Maps-Suche und Chat.">
+  <title>Aestas Parfumes | Info-Projekt</title>
+  <meta name="description" content="Info-Projekt einer modernen Parfum-Boutique mit Shop, Warenkorb, Produktverwaltung, Maps-Suche und Chat-Demo.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./styles.css?v=20260603">
 </head>
 <body>
   <header class="site-header">
@@ -22,7 +22,7 @@
         <a href="#contact">Kontakt</a>
       </nav>
       <div class="header-actions">
-        <button class="icon-btn" type="button" aria-label="Suche">
+        <button class="icon-btn" id="searchFocusBtn" type="button" aria-label="Shop durchsuchen">
           <i data-lucide="search"></i>
         </button>
         <button class="icon-btn" id="cartToggleBtn" type="button" aria-label="Warenkorb öffnen">
@@ -42,9 +42,9 @@
       >
       <div class="hero-overlay"></div>
       <div class="container hero-content">
-        <p class="eyebrow">Signature Collection 2026 - Live Update 20.05.2026</p>
+        <p class="eyebrow">Info-Projekt 2026</p>
         <h1>Moderne Düfte für deinen Stil.</h1>
-        <p>Entdecke exklusive Kompositionen mit Zitrusnoten, Amber-Akkorden und elegantem Oud.</p>
+        <p>Eine interaktive Boutique-Website mit Produktkatalog, Warenkorb, Filialsuche und Chat-Funktionen.</p>
         <div class="hero-cta">
           <a href="#shop" class="btn btn-primary">
             <i data-lucide="sparkles"></i>
@@ -72,6 +72,20 @@
       </div>
     </section>
 
+    <section class="project-section" aria-label="Projektübersicht">
+      <div class="container project-grid">
+        <div>
+          <p class="eyebrow">Projektumfang</p>
+          <h2>Eine fertige Frontend-Demo für eine Parfum-Boutique.</h2>
+        </div>
+        <p>
+          Die Website zeigt typische Funktionen eines kleinen Online-Shops: Produktfilter,
+          Warenkorb, neue Produkte per Formular, Google-Maps-Suche, KI-Duftberatung und Support-Chat.
+          Alle Demo-Daten bleiben im Browser gespeichert.
+        </p>
+      </div>
+    </section>
+
     <section class="shop-section" id="shop">
       <div class="container">
         <div class="section-head">
@@ -79,6 +93,10 @@
             <p class="eyebrow">Shop</p>
             <h2>Kuratiertes Sortiment</h2>
           </div>
+          <label class="shop-search" for="shopSearchInput">
+            <i data-lucide="search"></i>
+            <input id="shopSearchInput" type="search" placeholder="Produkt suchen">
+          </label>
           <div class="filter-group" role="tablist" aria-label="Filter nach Duftfamilie">
             <button class="filter-btn active" type="button" data-filter="all">Alle</button>
             <button class="filter-btn" type="button" data-filter="fresh">Frisch</button>
@@ -274,7 +292,7 @@
             <div class="form-actions full">
               <button class="btn btn-primary" type="submit">
                 <i data-lucide="plus-circle"></i>
-                Produkt hinzufuegen
+                Produkt hinzufügen
               </button>
             </div>
           </form>
@@ -285,7 +303,7 @@
           <p class="eyebrow">Warenkorb</p>
           <h2>Shop-Logik aktiv</h2>
           <ul class="feature-list">
-            <li>Produkte koennen direkt in den Warenkorb gelegt werden.</li>
+            <li>Produkte können direkt in den Warenkorb gelegt werden.</li>
             <li>Warenkorb zeigt Menge, Einzelpreis und Gesamtsumme.</li>
             <li>Entfernen und Leeren-Funktion sind integriert.</li>
             <li>Neue Produkte aus dem Formular werden sofort kaufbar.</li>
@@ -307,7 +325,7 @@
           <form class="map-search-form" id="mapSearchForm">
             <label class="map-input-wrap" for="mapAddressInput">
               <i data-lucide="map-pin"></i>
-              <input id="mapAddressInput" type="text" placeholder="z. B. Kurfuerstendamm 21, Berlin" required>
+              <input id="mapAddressInput" type="text" placeholder="z. B. Kurfürstendamm 21, Berlin" required>
             </label>
             <button class="btn btn-primary" type="submit">Adresse suchen</button>
           </form>
@@ -338,7 +356,7 @@
               <span class="status-pill status-ai">Online</span>
             </div>
             <div class="chat-messages" id="aiMessages">
-              <div class="chat-message bot">Hallo, ich helfe dir bei Duft-Empfehlungen. Frag mich z. B. nach frischen oder Oud-Dueften.</div>
+              <div class="chat-message bot">Hallo, ich helfe dir bei Duft-Empfehlungen. Frag mich z. B. nach frischen oder Oud-Düften.</div>
             </div>
             <form class="chat-form" id="aiChatForm">
               <input id="aiInput" type="text" placeholder="Nach Duft fragen..." required>
@@ -372,7 +390,7 @@
         <img src="https://images.unsplash.com/photo-1615368143753-2f2b5f4f0b95?auto=format&fit=crop&w=1200&q=80" alt="Parfum-Labor mit Rohstoffen">
         <div class="story-text">
           <p class="eyebrow">Unsere Philosophie</p>
-          <h2>Kleine Chargen, hohe Qualitaet.</h2>
+          <h2>Kleine Chargen, hohe Qualität.</h2>
           <p>Jeder Duft wird in limitierten Mengen produziert, damit jede Komposition konsistent und hochwertig bleibt.</p>
           <a href="#contact" class="btn btn-story">
             <i data-lucide="mail"></i>
@@ -387,8 +405,8 @@
     <div class="container footer-grid">
       <div>
         <h3>Aestas Parfumes</h3>
-        <p>Premium-Parfums für moderne Alltagsluxus-Momente.</p>
-        <p>Website zuletzt aktualisiert: 20.05.2026</p>
+        <p>Info-Projekt einer Premium-Parfum-Boutique.</p>
+        <p>Frontend-Demo mit statischem Hosting.</p>
       </div>
       <div>
         <h4>Adresse</h4>
@@ -400,7 +418,11 @@
       </div>
       <div>
         <h4>Telefon</h4>
-        <p>+49 30 1234 5678</p>
+        <p>+49 176 62632223</p>
+      </div>
+      <div>
+        <h4>Rechtliches</h4>
+        <p><a href="./impressum.html">Impressum</a> · <a href="./datenschutz.html">Datenschutz</a></p>
       </div>
     </div>
   </footer>
@@ -409,7 +431,7 @@
   <aside class="cart-drawer" id="cartDrawer" aria-hidden="true">
     <div class="cart-header">
       <h3>Warenkorb</h3>
-      <button class="icon-btn small-btn" id="cartCloseBtn" type="button" aria-label="Warenkorb schliessen">
+      <button class="icon-btn small-btn" id="cartCloseBtn" type="button" aria-label="Warenkorb schließen">
         <i data-lucide="x"></i>
       </button>
     </div>
@@ -433,6 +455,6 @@
   </aside>
 
   <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="./script.js"></script>
+  <script src="./script.js?v=20260603"></script>
 </body>
 </html>

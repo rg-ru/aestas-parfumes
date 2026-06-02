@@ -1,6 +1,8 @@
 const productGrid = document.getElementById("productGrid");
 const bagCount = document.getElementById("bagCount");
 const filterButtons = Array.from(document.querySelectorAll(".filter-btn"));
+const searchFocusBtn = document.getElementById("searchFocusBtn");
+const shopSearchInput = document.getElementById("shopSearchInput");
 
 const cartToggleBtn = document.getElementById("cartToggleBtn");
 const cartCloseBtn = document.getElementById("cartCloseBtn");
@@ -33,21 +35,42 @@ const currencyFormatter = new Intl.NumberFormat("de-DE", {
   currency: "EUR",
 });
 
-let cart = [];
+const CART_STORAGE_KEY = "aestas_cart";
+const PRODUCTS_STORAGE_KEY = "aestas_custom_products";
+
+let cart = loadFromStorage(CART_STORAGE_KEY, []);
 let activeFilter = "all";
+let activeSearch = "";
 
 const supportReplies = {
   versand: "Support: Versand innerhalb Deutschlands dauert in der Regel 1-3 Werktage.",
-  rueckgabe: "Support: Rueckgaben sind innerhalb von 14 Tagen moeglich.",
-  rueckerstattung: "Support: Rueckerstattungen werden nach Eingang innerhalb von 3 Werktagen verarbeitet.",
-  bestellung: "Support: Sende uns bitte deine Bestellnummer, dann pruefen wir den Status sofort.",
-  standard: "Support: Danke fuer die Nachricht. Ein Teammitglied meldet sich zeitnah mit Details.",
+  rueckgabe: "Support: Rückgaben sind innerhalb von 14 Tagen möglich.",
+  rueckerstattung: "Support: Rückerstattungen werden nach Eingang innerhalb von 3 Werktagen verarbeitet.",
+  bestellung: "Support: Sende uns bitte deine Bestellnummer, dann prüfen wir den Status sofort.",
+  standard: "Support: Danke für die Nachricht. Ein Teammitglied meldet sich zeitnah mit Details.",
 };
 
 function syncIcons() {
   if (window.lucide) {
     window.lucide.createIcons();
   }
+}
+
+function loadFromStorage(key, fallbackValue) {
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) {
+      return fallbackValue;
+    }
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : fallbackValue;
+  } catch {
+    return fallbackValue;
+  }
+}
+
+function saveToStorage(key, value) {
+  localStorage.setItem(key, JSON.stringify(value));
 }
 
 function formatEur(value) {
@@ -138,7 +161,7 @@ function renderCart() {
     plusBtn.type = "button";
     plusBtn.dataset.action = "increase";
     plusBtn.dataset.name = item.name;
-    plusBtn.setAttribute("aria-label", "Menge erhoehen");
+    plusBtn.setAttribute("aria-label", "Menge erhöhen");
     plusBtn.innerHTML = '<i data-lucide="plus"></i>';
 
     qtyControl.append(minusBtn, qtyValue, plusBtn);
@@ -156,6 +179,7 @@ function renderCart() {
   });
 
   syncIcons();
+  saveToStorage(CART_STORAGE_KEY, cart);
 }
 
 function addToCart(product) {
@@ -177,7 +201,10 @@ function addToCart(product) {
 function applyFilter() {
   const cards = Array.from(productGrid.querySelectorAll(".product-card"));
   cards.forEach((card) => {
-    const visible = activeFilter === "all" || card.dataset.category === activeFilter;
+    const matchesCategory = activeFilter === "all" || card.dataset.category === activeFilter;
+    const searchableText = `${card.dataset.name || ""} ${card.textContent || ""}`.toLowerCase();
+    const matchesSearch = !activeSearch || searchableText.includes(activeSearch);
+    const visible = matchesCategory && matchesSearch;
     card.hidden = !visible;
   });
 }
@@ -227,6 +254,22 @@ function createProductCard({ name, price, category, image, description }) {
   return card;
 }
 
+function getCustomProducts() {
+  return loadFromStorage(PRODUCTS_STORAGE_KEY, []);
+}
+
+function saveCustomProduct(product) {
+  const products = getCustomProducts();
+  products.push(product);
+  saveToStorage(PRODUCTS_STORAGE_KEY, products);
+}
+
+function renderCustomProducts() {
+  getCustomProducts().forEach((product) => {
+    productGrid.appendChild(createProductCard(product));
+  });
+}
+
 function appendChatMessage(container, text, role) {
   const message = document.createElement("div");
   message.className = `chat-message ${role}`;
@@ -239,28 +282,28 @@ function getAiReply(userMessage) {
   const text = userMessage.toLowerCase();
 
   if (text.includes("oud")) {
-    return "Fuer Oud-Liebhaber passen Aestas Ruber und Aestas Argentum besonders gut.";
+    return "Für Oud-Liebhaber passen Aestas Ruber und Aestas Argentum besonders gut.";
   }
   if (text.includes("frisch") || text.includes("fresh")) {
-    return "Fuer frische Duefte empfehle ich Aestas Alba, Aestas Luna oder Aestas Viridis.";
+    return "Für frische Düfte empfehle ich Aestas Alba, Aestas Luna oder Aestas Viridis.";
   }
   if (text.includes("rose") || text.includes("rosa") || text.includes("blume") || text.includes("floral")) {
-    return "Wenn du florale Duefte magst, schau dir Aestas Rosa und Aestas Flora an.";
+    return "Wenn du florale Düfte magst, schau dir Aestas Rosa und Aestas Flora an.";
   }
   if (text.includes("haltbar") || text.includes("haltbarkeit")) {
     return "Sehr gute Haltbarkeit liefern vor allem Aestas Ruber, Aestas Aurum und Aestas Solis.";
   }
   if (text.includes("geschenk")) {
-    return "Als Geschenk werden oft Aestas Luna und Aestas Solis gewaehlt.";
+    return "Als Geschenk werden oft Aestas Luna und Aestas Solis gewählt.";
   }
-  return "Sag mir gern, ob du eher frisch, warm oder intensiv magst. Dann gebe ich dir eine praezise Empfehlung.";
+  return "Sag mir gern, ob du eher frisch, warm oder intensiv magst. Dann gebe ich dir eine präzise Empfehlung.";
 }
 
 function getSupportReply(userMessage) {
   const text = userMessage.toLowerCase();
   if (text.includes("versand")) return supportReplies.versand;
-  if (text.includes("rueckgabe") || text.includes("retoure")) return supportReplies.rueckgabe;
-  if (text.includes("rueckerstattung")) return supportReplies.rueckerstattung;
+  if (text.includes("rückgabe") || text.includes("retoure")) return supportReplies.rueckgabe;
+  if (text.includes("rückerstattung")) return supportReplies.rueckerstattung;
   if (text.includes("bestellung") || text.includes("order")) return supportReplies.bestellung;
   return supportReplies.standard;
 }
@@ -287,6 +330,16 @@ filterButtons.forEach((button) => {
     button.classList.add("active");
     applyFilter();
   });
+});
+
+searchFocusBtn.addEventListener("click", () => {
+  document.getElementById("shop").scrollIntoView({ behavior: "smooth", block: "start" });
+  shopSearchInput.focus({ preventScroll: true });
+});
+
+shopSearchInput.addEventListener("input", () => {
+  activeSearch = shopSearchInput.value.trim().toLowerCase();
+  applyFilter();
 });
 
 cartItemsEl.addEventListener("click", (event) => {
@@ -324,7 +377,7 @@ clearCartBtn.addEventListener("click", () => {
 checkoutBtn.addEventListener("click", () => {
   appendChatMessage(
     supportMessages,
-    "Support: Checkout wurde als Demo ausgeloest. Fuer den Live-Betrieb koennen wir als naechstes Stripe anbinden.",
+    "Support: Checkout wurde als Demo ausgelöst. Für den Live-Betrieb können wir als nächstes Stripe anbinden.",
     "agent"
   );
   setDrawerOpen(false);
@@ -353,7 +406,7 @@ addProductForm.addEventListener("submit", (event) => {
   const price = Number(String(formData.get("price") || "").replace(",", "."));
 
   if (!name || !description || !image || !category || !Number.isFinite(price) || price <= 0) {
-    setProductFormStatus("Bitte alle Felder korrekt ausfuellen.", "error");
+    setProductFormStatus("Bitte alle Felder korrekt ausfüllen.", "error");
     return;
   }
 
@@ -366,8 +419,9 @@ addProductForm.addEventListener("submit", (event) => {
   });
 
   productGrid.appendChild(card);
+  saveCustomProduct({ name, price, category, image, description });
   addProductForm.reset();
-  setProductFormStatus(`Produkt "${name}" wurde hinzugefuegt.`, "success");
+  setProductFormStatus(`Produkt "${name}" wurde hinzugefügt.`, "success");
   applyFilter();
   syncIcons();
 });
@@ -411,6 +465,7 @@ supportChatForm.addEventListener("submit", (event) => {
   }, 420);
 });
 
+renderCustomProducts();
 renderCart();
 applyFilter();
 syncIcons();

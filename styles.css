@@ -107,6 +107,19 @@ img {
   border-color: var(--ink-muted);
 }
 
+.icon-btn i:empty::before,
+.btn i:empty::before,
+.add-btn i:empty::before,
+.map-input-wrap i:empty::before,
+.shop-search i:empty::before {
+  content: "";
+  width: 16px;
+  height: 16px;
+  border: 2px solid currentColor;
+  border-radius: 999px;
+  display: inline-block;
+}
+
 .small-btn {
   width: 36px;
   height: 36px;
@@ -276,6 +289,32 @@ img {
   font-size: 0.9rem;
 }
 
+.project-section {
+  padding: 2.2rem 0;
+  background: #fbf7ef;
+  border-bottom: 1px solid var(--line);
+}
+
+.project-grid {
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: 1.2rem;
+  align-items: center;
+}
+
+.project-grid h2 {
+  margin: 0;
+  font-family: "Playfair Display", serif;
+  font-size: 1.9rem;
+  line-height: 1.18;
+}
+
+.project-grid p {
+  margin: 0;
+  color: var(--ink-muted);
+  line-height: 1.65;
+}
+
 .shop-section,
 .manage-section,
 .map-section,
@@ -307,6 +346,29 @@ img {
   display: flex;
   flex-wrap: wrap;
   gap: 0.45rem;
+}
+
+.shop-search {
+  min-height: 42px;
+  flex: 1 1 220px;
+  max-width: 280px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 0.75rem;
+}
+
+.shop-search input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--ink-main);
+  font: inherit;
 }
 
 .filter-btn {
@@ -700,7 +762,7 @@ img {
 
 .footer-grid {
   display: grid;
-  grid-template-columns: 2fr repeat(3, 1fr);
+  grid-template-columns: 1.6fr repeat(4, minmax(0, 1fr));
   gap: 1rem;
 }
 
@@ -721,6 +783,16 @@ img {
   margin: 0;
   color: #4e463e;
   font-size: 0.92rem;
+}
+
+.site-footer a {
+  color: var(--ink-main);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.site-footer a:hover {
+  color: var(--warm);
 }
 
 .drawer-backdrop {
@@ -880,6 +952,49 @@ img {
   flex-wrap: wrap;
 }
 
+.legal-header {
+  grid-template-columns: auto auto;
+  justify-content: space-between;
+}
+
+.legal-page {
+  padding: 3rem 0 4rem;
+}
+
+.legal-card {
+  max-width: 860px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg-card);
+  padding: 1.6rem;
+}
+
+.legal-card h1,
+.legal-card h2 {
+  font-family: "Playfair Display", serif;
+}
+
+.legal-card h1 {
+  margin: 0 0 1rem;
+  font-size: 2.4rem;
+}
+
+.legal-card h2 {
+  margin: 1.4rem 0 0.5rem;
+  font-size: 1.35rem;
+}
+
+.legal-card p {
+  margin: 0 0 0.8rem;
+  color: var(--ink-muted);
+  line-height: 1.65;
+}
+
+.legal-card a {
+  color: var(--accent);
+  font-weight: 700;
+}
+
 @media (max-width: 1020px) {
   .section-head {
     flex-direction: column;
@@ -897,7 +1012,8 @@ img {
   .manage-grid,
   .map-layout,
   .chat-grid,
-  .story-grid {
+  .story-grid,
+  .project-grid {
     grid-template-columns: 1fr;
   }
 
@@ -917,6 +1033,9 @@ img {
     grid-column: 1 / -1;
     justify-content: start;
     gap: 0.95rem;
+    overflow-x: auto;
+    padding-bottom: 0.15rem;
+    white-space: nowrap;
   }
 
   .hero {
@@ -936,6 +1055,14 @@ img {
   .form-grid,
   .footer-grid {
     grid-template-columns: 1fr;
+  }
+
+  .section-head {
+    align-items: stretch;
+  }
+
+  .shop-search {
+    max-width: none;
   }
 
   .chat-panel {
