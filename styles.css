@@ -1,4 +1,5 @@
 :root {
+  /* Zentrale Farben: so bleibt das Design einheitlich und leicht anpassbar. */
   --bg-main: #efe7d8;
   --bg-soft: #f6f1e7;
   --bg-card: #fbf8f2;
@@ -21,6 +22,7 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Barrierefreiheit: sichtbarer Fokus fuer Tastaturbedienung. */
 a {
   text-underline-offset: 0.18em;
 }
@@ -45,6 +47,7 @@ body.no-scroll {
   overflow: hidden;
 }
 
+/* Sprunglink fuer Nutzer, die mit Tastatur oder Screenreader navigieren. */
 .skip-link {
   position: fixed;
   left: 1rem;
@@ -68,10 +71,12 @@ img {
 }
 
 .container {
+  /* Wiederverwendbarer Inhaltsrahmen fuer alle Seitenbereiche. */
   width: min(1140px, 92vw);
   margin: 0 auto;
 }
 
+/* Sticky Header: Navigation bleibt beim Scrollen erreichbar. */
 .site-header {
   position: sticky;
   top: 0;
@@ -143,6 +148,7 @@ img {
 .add-btn i:empty::before,
 .map-input-wrap i:empty::before,
 .shop-search i:empty::before {
+  /* Fallback, falls die externe Icon-Bibliothek nicht geladen wird. */
   content: "";
   width: 16px;
   height: 16px;
@@ -174,6 +180,7 @@ img {
 }
 
 .hero {
+  /* Hero-Bereich mit vollflaechigem Bild und Text darueber. */
   min-height: 72vh;
   position: relative;
   overflow: hidden;
@@ -302,6 +309,7 @@ img {
 }
 
 .highlight-grid {
+  /* Drei kurze Vorteile unter dem Hero, auf Mobilgeraeten spaeter einspaltig. */
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
@@ -324,6 +332,7 @@ img {
 }
 
 .project-section {
+  /* Kurze Projekt-Erklaerung, damit sofort klar ist, worum es geht. */
   padding: 2.2rem 0;
   background: #fbf7ef;
   border-bottom: 1px solid var(--line);
@@ -353,6 +362,7 @@ img {
 .manage-section,
 .map-section,
 .chat-section {
+  /* Einheitliche vertikale Abstaende fuer die Hauptbereiche. */
   padding: 3.2rem 0 4rem;
 }
 
@@ -379,6 +389,7 @@ img {
 }
 
 .filter-group {
+  /* Filterbuttons duerfen umbrechen, damit sie auf kleinen Bildschirmen nicht ueberlaufen. */
   display: flex;
   flex-wrap: wrap;
   gap: 0.45rem;
@@ -425,6 +436,7 @@ img {
 }
 
 .product-grid {
+  /* Produktkarten im Raster: Desktop dreispaltig, mobil einspaltig. */
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
@@ -456,6 +468,7 @@ img {
 }
 
 .gender-badge {
+  /* Damen/Herren-Kennzeichnung direkt in jeder Produktkarte. */
   width: fit-content;
   min-height: 26px;
   border-radius: 999px;
@@ -491,6 +504,7 @@ img {
 }
 
 .product-meta {
+  /* Preis, Detailbutton und Warenkorbbutton bleiben zusammen in einer flexiblen Zeile. */
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -627,6 +641,7 @@ img {
 }
 
 .map-layout {
+  /* Text und Karte stehen nebeneinander, auf kleineren Screens untereinander. */
   display: grid;
   grid-template-columns: 0.95fr 1.05fr;
   gap: 1rem;
@@ -693,6 +708,7 @@ img {
 }
 
 .chat-grid {
+  /* KI-Chat und Support-Chat teilen sich den Bereich zweispaltig. */
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
@@ -789,6 +805,7 @@ img {
 }
 
 .story-section {
+  /* Storybereich als ruhiger Abschluss vor Quellen und Footer. */
   padding: 0 0 4rem;
 }
 
@@ -847,6 +864,7 @@ img {
 }
 
 .page-hero {
+  /* Gemeinsamer Kopfbereich fuer die Unterseiten. */
   background: linear-gradient(135deg, #efe7d8 0%, #f8f3ea 100%);
   border-bottom: 1px solid var(--line);
 }
@@ -885,6 +903,7 @@ img {
 }
 
 .info-grid {
+  /* Infokarten auf Unterseiten, z. B. Shop- und Projektseite. */
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
@@ -1039,6 +1058,7 @@ img {
 }
 
 .footer-grid {
+  /* Footer mit mehreren Linkgruppen fuer schnelle Orientierung. */
   display: grid;
   grid-template-columns: 1.5fr repeat(5, minmax(0, 1fr));
   gap: 1rem;
@@ -1074,6 +1094,7 @@ img {
 }
 
 .drawer-backdrop {
+  /* Dunkler Hintergrund beim geoeffneten Warenkorb. */
   position: fixed;
   inset: 0;
   z-index: 30;
@@ -1087,6 +1108,7 @@ img {
 }
 
 .cart-drawer {
+  /* Seitlicher Warenkorb, der per Klasse .open eingeblendet wird. */
   position: fixed;
   top: 0;
   right: 0;
@@ -1231,6 +1253,7 @@ img {
 }
 
 .modal-backdrop {
+  /* Dunkler Hintergrund beim Produktdetail-Dialog. */
   position: fixed;
   inset: 0;
   z-index: 70;
@@ -1244,6 +1267,7 @@ img {
 }
 
 .product-modal {
+  /* Produktdialog: zeigt Groesse, Konzentration, Duftnoten und Inhaltsstoffe. */
   position: fixed;
   left: 50%;
   top: 50%;
@@ -1367,6 +1391,7 @@ img {
 }
 
 @keyframes fade-up {
+  /* Dezente Animation fuer Karten und Seitenkoepfe. */
   from {
     opacity: 0;
     transform: translateY(14px);
@@ -1389,6 +1414,7 @@ img {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  /* Nutzer mit reduzierter Bewegung bekommen fast keine Animationen. */
   *,
   *::before,
   *::after {
@@ -1399,6 +1425,7 @@ img {
 }
 
 @media (max-width: 1020px) {
+  /* Tablet-Layout: breite Raster werden zu einer Spalte reduziert. */
   .section-head {
     flex-direction: column;
     align-items: start;
@@ -1433,6 +1460,7 @@ img {
 }
 
 @media (max-width: 760px) {
+  /* Smartphone-Layout: Navigation scrollt horizontal, Inhalte werden einspaltig. */
   .header-inner {
     grid-template-columns: 1fr auto;
     row-gap: 0.65rem;

@@ -11,7 +11,10 @@
   <link rel="stylesheet" href="./styles.css?v=20260603-4">
 </head>
 <body>
+  <!-- Barrierefreiheit: Dieser Link erscheint beim Tabben und springt direkt zum Shopbereich. -->
   <a class="skip-link" href="#shop">Direkt zum Shop springen</a>
+
+  <!-- Kopfbereich mit Hauptnavigation und Schnellzugriff auf Suche und Warenkorb. -->
   <header class="site-header">
     <div class="container header-inner">
       <a href="./index.html" class="brand">Aestas Parfumes</a>
@@ -35,6 +38,7 @@
   </header>
 
   <main>
+    <!-- Startbereich: zeigt sofort Thema, Marke und wichtigste Aktionen der Website. -->
     <section class="hero" id="collections">
       <!-- Eigenleistung: Der Hero erklärt sofort Thema, Ziel und wichtigste Funktionen der Website. -->
       <img
@@ -57,6 +61,7 @@
       </div>
     </section>
 
+    <!-- Kurze Nutzenargumente fuer Besucherinnen und Besucher. -->
     <section class="highlights">
       <div class="container highlight-grid">
         <article>
@@ -74,6 +79,7 @@
       </div>
     </section>
 
+    <!-- Projektuebersicht: erklaert, dass die Seite eine Frontend-Demo fuer die Projektarbeit ist. -->
     <section class="project-section" aria-label="Projektübersicht">
       <div class="container project-grid">
         <div>
@@ -88,6 +94,7 @@
       </div>
     </section>
 
+    <!-- Shopbereich: Produkte koennen gesucht, gefiltert, angesehen und in den Warenkorb gelegt werden. -->
     <section class="shop-section" id="shop">
       <div class="container">
         <div class="section-head">
@@ -109,6 +116,7 @@
           </div>
         </div>
 
+        <!-- Produktdaten stehen direkt an den Karten, damit JavaScript daraus Details und Filter lesen kann. -->
         <div class="product-grid" id="productGrid">
           <article class="product-card" data-category="oud" data-gender="herren" data-name="Aestas Ruber" data-price="169" data-size="100 ml" data-concentration="Eau de Parfum" data-notes="Safran, dunkle Beeren, Oud-Holz, Leder" data-ingredients="Alcohol Denat., Parfum, Aqua, Limonene, Linalool">
             <img src="./assets/products/aestas-ruber.png" alt="Parfum Aestas Ruber" loading="lazy" decoding="async">
@@ -283,6 +291,7 @@
       </div>
     </section>
 
+    <!-- Formularbereich: neue Demo-Produkte werden lokal im Browser gespeichert. -->
     <section class="manage-section" id="produkte">
       <div class="container manage-grid">
         <article class="manage-panel">
@@ -347,6 +356,7 @@
       </div>
     </section>
 
+    <!-- Filialsuche: die eingegebene Adresse wird in die Google-Maps-Einbettung uebernommen. -->
     <section class="map-section" id="filiale">
       <div class="container map-layout">
         <div>
@@ -372,6 +382,7 @@
       </div>
     </section>
 
+    <!-- Zusatzaufgabe: zwei einfache Chat-Systeme mit lokalen Antworten ohne Backend. -->
     <section class="chat-section" id="chats">
       <div class="container">
         <div class="section-head chat-head">
@@ -416,6 +427,7 @@
       </div>
     </section>
 
+    <!-- Storybereich: kurze Markenbeschreibung und visuelle Auflockerung. -->
     <section class="story-section" id="story">
       <div class="container story-grid">
         <img src="./assets/products/aestas-aurum.png" alt="Aestas Aurum als Beispiel für warme Amber-Duftfamilien" loading="lazy" decoding="async">
@@ -431,6 +443,7 @@
       </div>
     </section>
 
+    <!-- Quellenhinweis: verweist auf die Projektseite mit ausfuehrlicher Dokumentation. -->
     <section class="source-section" aria-label="Kurzquellen">
       <div class="container source-box">
         <p class="eyebrow">Quellen</p>
@@ -443,6 +456,7 @@
     </section>
   </main>
 
+  <!-- Footer mit Kontakt, Rechtlichem und Links zu allen Unterseiten. -->
   <footer class="site-footer" id="contact">
     <div class="container footer-grid">
       <div>
@@ -473,7 +487,10 @@
     </div>
   </footer>
 
+  <!-- Overlay fuer den Warenkorb-Seitenschieber. -->
   <div class="drawer-backdrop" id="drawerBackdrop" hidden></div>
+
+  <!-- Barrierefreier Produktdialog: wird per Klick auf "Mehr Infos" gefuellt und geoeffnet. -->
   <div class="modal-backdrop" id="productModalBackdrop" hidden></div>
   <section
     class="product-modal"

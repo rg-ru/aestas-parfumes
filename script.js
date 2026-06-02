@@ -4,6 +4,8 @@ const filterButtons = Array.from(document.querySelectorAll(".filter-btn"));
 const searchFocusBtn = document.getElementById("searchFocusBtn");
 const shopSearchInput = document.getElementById("shopSearchInput");
 
+// Alle wichtigen DOM-Elemente werden einmal am Anfang gespeichert.
+// Dadurch muessen sie spaeter nicht immer wieder neu gesucht werden.
 const cartToggleBtn = document.getElementById("cartToggleBtn");
 const cartCloseBtn = document.getElementById("cartCloseBtn");
 const openCartFromSection = document.getElementById("openCartFromSection");
@@ -48,6 +50,7 @@ const currencyFormatter = new Intl.NumberFormat("de-DE", {
   currency: "EUR",
 });
 
+// localStorage speichert Demo-Daten im Browser, auch nach einem Neuladen der Seite.
 const CART_STORAGE_KEY = "aestas_cart";
 const PRODUCTS_STORAGE_KEY = "aestas_custom_products";
 
@@ -67,12 +70,14 @@ const supportReplies = {
 };
 
 function syncIcons() {
+  // Lucide ersetzt die data-lucide-Platzhalter durch echte SVG-Icons.
   if (window.lucide) {
     window.lucide.createIcons();
   }
 }
 
 function loadFromStorage(key, fallbackValue) {
+  // Fehlerhafte oder fehlende Speicherwerte werden abgefangen, damit die Seite stabil bleibt.
   try {
     const raw = localStorage.getItem(key);
     if (!raw) {
@@ -86,10 +91,12 @@ function loadFromStorage(key, fallbackValue) {
 }
 
 function saveToStorage(key, value) {
+  // Arrays wie Warenkorb und eigene Produkte werden als JSON-Text gespeichert.
   localStorage.setItem(key, JSON.stringify(value));
 }
 
 function formatEur(value) {
+  // Einheitliche deutsche Preisformatierung fuer Produktkarten und Warenkorb.
   return currencyFormatter.format(value);
 }
 
@@ -103,6 +110,7 @@ function parsePrice(text) {
 }
 
 function setDrawerOpen(open) {
+  // Der Warenkorb wird als seitlicher Drawer geoeffnet und blockiert dabei den Hintergrund.
   cartDrawer.classList.toggle("open", open);
   cartDrawer.setAttribute("aria-hidden", open ? "false" : "true");
   drawerBackdrop.classList.toggle("open", open);
@@ -111,6 +119,7 @@ function setDrawerOpen(open) {
 }
 
 function setProductModalOpen(open) {
+  // Der Produktdialog ist als modal gekennzeichnet und setzt den Fokus auf den Schliessen-Button.
   productModal.classList.toggle("open", open);
   productModal.setAttribute("aria-hidden", open ? "false" : "true");
   productModalBackdrop.classList.toggle("open", open);
@@ -125,6 +134,7 @@ function setProductModalOpen(open) {
 }
 
 function getCardData(card) {
+  // Aus einer Produktkarte werden Name und Preis fuer den Warenkorb ausgelesen.
   const nameFromDataset = card.dataset.name;
   const priceFromDataset = Number(card.dataset.price);
 
@@ -139,6 +149,7 @@ function getCardData(card) {
 }
 
 function getProductDetails(card) {
+  // Detaildaten wie Groesse, Duftnoten und Inhaltsstoffe liegen als data-Attribute an der Karte.
   const image = card.querySelector("img");
   const description = card.querySelector(".product-info p")?.textContent?.trim() || "";
   const genderText = card.dataset.gender === "herren" ? "Herrenparfum, eckiger Flakon" : "Damenparfum, runder Flakon";
@@ -157,6 +168,7 @@ function getProductDetails(card) {
 }
 
 function openProductDetails(card) {
+  // Der Dialog wird dynamisch mit den Daten des angeklickten Parfums gefuellt.
   selectedProduct = getProductDetails(card);
   lastFocusedElement = document.activeElement;
 
@@ -175,6 +187,7 @@ function openProductDetails(card) {
 }
 
 function renderCart() {
+  // Der Warenkorb wird komplett neu gerendert, sobald sich Menge oder Inhalt aendern.
   cartItemsEl.innerHTML = "";
 
   const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
@@ -287,6 +300,7 @@ function setProductFormStatus(message, type) {
 }
 
 function createProductCard({ name, price, category, gender, image, description }) {
+  // Neue Produkte aus dem Formular erhalten dieselbe Struktur wie die festen Produktkarten.
   const card = document.createElement("article");
   card.className = "product-card";
   card.dataset.category = category;
@@ -338,22 +352,26 @@ function createProductCard({ name, price, category, gender, image, description }
 }
 
 function getCustomProducts() {
+  // Eigene Produkte kommen aus dem lokalen Browser-Speicher.
   return loadFromStorage(PRODUCTS_STORAGE_KEY, []);
 }
 
 function saveCustomProduct(product) {
+  // Neue Produkte werden an die vorhandene Liste angehaengt.
   const products = getCustomProducts();
   products.push(product);
   saveToStorage(PRODUCTS_STORAGE_KEY, products);
 }
 
 function renderCustomProducts() {
+  // Beim Laden der Seite werden eigene Produkte wieder in den Shop eingefuegt.
   getCustomProducts().forEach((product) => {
     productGrid.appendChild(createProductCard(product));
   });
 }
 
 function appendChatMessage(container, text, role) {
+  // Neue Chatnachrichten werden unten angehaengt und der Chat scrollt automatisch mit.
   const message = document.createElement("div");
   message.className = `chat-message ${role}`;
   message.textContent = text;
@@ -362,6 +380,7 @@ function appendChatMessage(container, text, role) {
 }
 
 function getAiReply(userMessage) {
+  // Einfache lokale Wenn-Dann-Logik fuer Duftempfehlungen.
   const text = userMessage.toLowerCase();
 
   if (text.includes("oud")) {
@@ -383,6 +402,7 @@ function getAiReply(userMessage) {
 }
 
 function getSupportReply(userMessage) {
+  // Der Support-Chat erkennt typische Stichwoerter wie Versand oder Retoure.
   const text = userMessage.toLowerCase();
   if (text.includes("versand")) return supportReplies.versand;
   if (text.includes("rückgabe") || text.includes("retoure")) return supportReplies.rueckgabe;
@@ -392,6 +412,7 @@ function getSupportReply(userMessage) {
 }
 
 productGrid.addEventListener("click", (event) => {
+  // Ein Klick auf "In den Warenkorb" kauft nicht, sondern legt nur lokal in den Demo-Warenkorb.
   const addButton = event.target.closest(".add-btn");
   const detailButton = event.target.closest(".detail-btn");
   const card = event.target.closest(".product-card");
@@ -412,6 +433,7 @@ productGrid.addEventListener("click", (event) => {
 });
 
 filterButtons.forEach((button) => {
+  // Jeder Filter-Button aktualisiert den aktiven Filter und blendet unpassende Produkte aus.
   button.addEventListener("click", () => {
     activeFilter = button.dataset.filter || "all";
     filterButtons.forEach((btn) => btn.classList.remove("active"));
@@ -421,6 +443,7 @@ filterButtons.forEach((button) => {
 });
 
 searchFocusBtn.addEventListener("click", () => {
+  // Der Suchbutton im Header springt direkt zur Produktsuche.
   document.getElementById("shop").scrollIntoView({ behavior: "smooth", block: "start" });
   shopSearchInput.focus({ preventScroll: true });
 });
@@ -431,6 +454,7 @@ shopSearchInput.addEventListener("input", () => {
 });
 
 cartItemsEl.addEventListener("click", (event) => {
+  // Warenkorb-Buttons steuern Mengen: plus, minus oder entfernen.
   const actionButton = event.target.closest("button[data-action]");
   if (!actionButton) {
     return;
@@ -477,6 +501,7 @@ cartCloseBtn.addEventListener("click", () => setDrawerOpen(false));
 drawerBackdrop.addEventListener("click", () => setDrawerOpen(false));
 
 document.addEventListener("keydown", (event) => {
+  // Escape schliesst zuerst den Produktdialog, sonst den Warenkorb.
   if (event.key === "Escape" && productModal.classList.contains("open")) {
     setProductModalOpen(false);
     return;
@@ -498,6 +523,7 @@ productModalCartBtn.addEventListener("click", () => {
 });
 
 addProductForm.addEventListener("submit", (event) => {
+  // Das Produktformular erstellt eine neue Karte, ohne die Seite neu zu laden.
   event.preventDefault();
   setProductFormStatus("", null);
 
@@ -533,6 +559,7 @@ addProductForm.addEventListener("submit", (event) => {
 });
 
 mapSearchForm.addEventListener("submit", (event) => {
+  // Die Karte wird ueber die eingegebene Adresse neu geladen.
   event.preventDefault();
   const query = mapAddressInput.value.trim();
   if (!query) {
@@ -542,6 +569,7 @@ mapSearchForm.addEventListener("submit", (event) => {
 });
 
 aiChatForm.addEventListener("submit", (event) => {
+  // Der KI-Chat antwortet zeitverzoegert, damit es wie ein kurzer Dialog wirkt.
   event.preventDefault();
   const message = aiInput.value.trim();
   if (!message) {
@@ -557,6 +585,7 @@ aiChatForm.addEventListener("submit", (event) => {
 });
 
 supportChatForm.addEventListener("submit", (event) => {
+  // Der Support-Chat nutzt dieselbe Chatlogik, aber andere Antworttexte.
   event.preventDefault();
   const message = supportInput.value.trim();
   if (!message) {
