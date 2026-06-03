@@ -1,62 +1,62 @@
 <!doctype html>
 <html lang="de">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Datenschutz | Aestas Parfumes</title>
   <meta name="robots" content="noindex,follow">
-  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
-  <style>
-    body { margin: 0; background: #f7f1e7; color: #2d2117; font-family: "Manrope", sans-serif; }
-    main { width: min(920px, calc(100% - 32px)); margin: 28px auto; }
-    .card { background: #fffaf4; border: 1px solid #dbc3a4; border-radius: 20px; padding: 24px; }
-    h1, h2 { font-family: "Cormorant Garamond", Georgia, serif; margin: 0 0 10px; line-height: 1.1; }
-    h1 { font-size: clamp(2.1rem, 5vw, 3rem); }
-    h2 { margin-top: 20px; font-size: 1.55rem; }
-    p, li { color: #5a4a39; }
-    ul { padding-left: 18px; }
-    a { color: #7b512a; font-weight: 700; text-decoration: none; }
-    .back { display: inline-block; margin-top: 18px; }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css?v=20260603-6">
 </head>
 <body>
-  <main>
-    <section class="card">
-      <h1>Datenschutzerklärung</h1>
-      <p>Diese Seite informiert über Art, Umfang und Zweck der Verarbeitung personenbezogener Daten.</p>
+  <header class="site-header">
+    <div class="container header-inner legal-header">
+      <a href="./index.html" class="brand">Aestas Parfumes</a>
+      <nav class="site-nav" aria-label="Seitennavigation">
+        <a href="./index.html">Start</a>
+        <a href="./shop.html">Shop</a>
+        <a href="./filiale.html">Filiale</a>
+        <a href="./chats.html">Chats</a>
+        <a href="./projekt.html">Projekt</a>
+        <a href="./impressum.html">Impressum</a>
+      </nav>
+    </div>
+  </header>
 
-      <h2>1. Verantwortlicher</h2>
+  <main class="legal-page">
+    <section class="container legal-card">
+      <p class="eyebrow">Rechtliches</p>
+      <h1>Datenschutzerklärung</h1>
+      <p>Diese Seite beschreibt die Datenverarbeitung innerhalb des Info-Projekts.</p>
+
+      <h2>Verantwortlicher</h2>
       <p>
         Aestas Parfumes<br>
-        Musterstraße 1, 10115 Berlin<br>
-        E-Mail: <a href="mailto:contact@aestasparfumes.com">contact@aestasparfumes.com</a>
+        Berlin, Deutschland<br>
+        E-Mail: <a href="mailto:support@aestasparfumes.com">support@aestasparfumes.com</a>
       </p>
 
-      <h2>2. Erhobene Daten</h2>
-      <ul>
-        <li>Server-Logdaten (z. B. IP-Adresse, Datum, Uhrzeit, User-Agent)</li>
-        <li>Kontaktdaten, die du über ein Kontaktformular oder per E-Mail sendest</li>
-      </ul>
-
-      <h2>3. Zweck der Verarbeitung</h2>
-      <ul>
-        <li>Bereitstellung und Sicherheit der Website</li>
-        <li>Bearbeitung von Anfragen und Kommunikation</li>
-      </ul>
-
-      <h2>4. Rechtsgrundlagen</h2>
-      <p>Die Verarbeitung erfolgt gemäß Art. 6 Abs. 1 lit. a, b und f DSGVO.</p>
-
-      <h2>5. Hinweis</h2>
+      <h2>Lokale Demo-Daten</h2>
       <p>
-        Diese Seite ist eine Vorlage. Bitte prüfe die Inhalte juristisch und ersetze
-        Platzhalter durch deine tatsächlichen Daten und eingesetzten Dienste.
+        Warenkorb und selbst hinzugefügte Produkte werden lokal im Browser gespeichert.
+        Diese Daten werden durch die statische Website nicht an einen eigenen Server übertragen.
       </p>
 
-      <a class="back" href="index.html">Zurück zur Startseite</a>
+      <h2>Externe Dienste</h2>
+      <p>
+        Die Website verwendet eingebettete Inhalte und Ressourcen externer Anbieter, zum Beispiel
+        Google Maps, Google Fonts und die Lucide-Icon-Bibliothek.
+      </p>
+
+      <h2>Hinweis zum Info-Projekt</h2>
+      <p>
+        Diese Datenschutzerklärung ist eine Vorlage. Vor einem produktiven Einsatz sollten alle
+        eingesetzten Dienste und Kontaktdaten juristisch geprüft und angepasst werden.
+      </p>
+
+      <a class="btn btn-outline" href="./index.html">Zurück zur Startseite</a>
     </section>
   </main>
 </body>
