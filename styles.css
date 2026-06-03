@@ -9,6 +9,9 @@
   --accent: #2d5440;
   --accent-hover: #203d30;
   --warm: #8f6b3f;
+  --gold: #c79a3d;
+  --gold-dark: #8b6423;
+  --gold-soft: #f5dda0;
   --alert: #934826;
 }
 
@@ -122,6 +125,8 @@ img {
 
 .header-actions {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: end;
   gap: 0.5rem;
 }
 
@@ -141,6 +146,16 @@ img {
 
 .icon-btn:hover {
   border-color: var(--ink-muted);
+}
+
+.text-size-btn {
+  width: 46px;
+  font-weight: 800;
+}
+
+.speak-active {
+  border-color: var(--gold-dark);
+  background: var(--gold-soft);
 }
 
 .icon-btn i:empty::before,
@@ -254,12 +269,15 @@ img {
 }
 
 .btn-primary {
-  background: var(--accent);
-  color: #fff;
+  background: linear-gradient(135deg, var(--gold-soft), var(--gold));
+  color: #20170b;
+  border-color: color-mix(in srgb, var(--gold-dark) 44%, transparent);
+  box-shadow: 0 8px 18px rgba(139, 100, 35, 0.16);
 }
 
 .btn-primary:hover {
-  background: var(--accent-hover);
+  background: linear-gradient(135deg, #f8e8b5, #d4a848);
+  border-color: var(--gold-dark);
 }
 
 .btn-secondary {
@@ -448,7 +466,7 @@ img {
   overflow: hidden;
   background: var(--bg-card);
   cursor: pointer;
-  transition: transform 160ms ease, box-shadow 160ms ease;
+  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
   animation: fade-up 480ms ease both;
 }
 
@@ -456,11 +474,17 @@ img {
 .product-card:focus-visible {
   transform: translateY(-2px);
   box-shadow: 0 10px 20px rgba(41, 34, 26, 0.08);
+  border-color: color-mix(in srgb, var(--gold) 60%, var(--line));
 }
 
 .product-card img {
   aspect-ratio: 4 / 5;
   object-fit: cover;
+  transition: transform 260ms ease;
+}
+
+.product-card:hover img {
+  transform: scale(1.03);
 }
 
 .product-info {
@@ -534,6 +558,12 @@ img {
 
 .detail-btn {
   background: #f6efe5;
+}
+
+.add-btn {
+  background: linear-gradient(135deg, var(--gold-soft), var(--gold));
+  border-color: color-mix(in srgb, var(--gold-dark) 42%, transparent);
+  color: #20170b;
 }
 
 .add-btn:hover,
@@ -1252,6 +1282,40 @@ img {
   flex-wrap: wrap;
 }
 
+.checkout-form {
+  /* Lieferadresse bleibt im Warenkorb, damit der Demo-Checkout nachvollziehbar ist. */
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fffaf0;
+  padding: 0.75rem;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.checkout-form label,
+.size-select-wrap span {
+  font-size: 0.84rem;
+  font-weight: 800;
+  color: var(--ink-main);
+}
+
+.checkout-form input,
+.size-select-wrap select {
+  min-height: 44px;
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink-main);
+  font: inherit;
+  padding: 0.68rem 0.75rem;
+}
+
+.checkout-status {
+  min-height: 1.25rem;
+  color: var(--ink-muted);
+}
+
 .modal-backdrop {
   /* Dunkler Hintergrund beim Produktdetail-Dialog. */
   position: fixed;
@@ -1345,6 +1409,57 @@ img {
   margin: 0;
   color: var(--ink-main);
   line-height: 1.5;
+}
+
+.size-select-wrap {
+  /* Groessenauswahl im Produktdialog mit sichtbarer Preisvorschau. */
+  margin: 0 0 0.7rem;
+  display: grid;
+  gap: 0.38rem;
+}
+
+.price-preview {
+  margin: 0 0 1rem;
+  border-radius: 8px;
+  background: #fff7df;
+  border: 1px solid color-mix(in srgb, var(--gold) 55%, var(--line));
+  color: #4b3512;
+  padding: 0.65rem 0.75rem;
+  font-weight: 700;
+}
+
+.code-origin-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.code-origin {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 1rem;
+  background: var(--bg-card);
+}
+
+.code-origin h3 {
+  margin: 0 0 0.55rem;
+  font-size: 1rem;
+}
+
+.code-origin p {
+  margin: 0;
+  color: var(--ink-muted);
+  line-height: 1.55;
+}
+
+.human-code {
+  border-color: #cc4e79;
+  box-shadow: inset 4px 0 0 #d94d84;
+}
+
+.ai-code {
+  border-color: #577ab8;
+  box-shadow: inset 4px 0 0 #577ab8;
 }
 
 .legal-header {
@@ -1441,10 +1556,11 @@ img {
 
   .manage-grid,
   .map-layout,
-  .chat-grid,
-  .story-grid,
-  .project-grid,
-  .info-grid,
+	  .chat-grid,
+	  .story-grid,
+	  .project-grid,
+	  .code-origin-grid,
+	  .info-grid,
   .info-grid.two-columns {
     grid-template-columns: 1fr;
   }

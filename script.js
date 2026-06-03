@@ -3,6 +3,9 @@ const bagCount = document.getElementById("bagCount");
 const filterButtons = Array.from(document.querySelectorAll(".filter-btn"));
 const searchFocusBtn = document.getElementById("searchFocusBtn");
 const shopSearchInput = document.getElementById("shopSearchInput");
+const fontDecreaseBtn = document.getElementById("fontDecreaseBtn");
+const fontIncreaseBtn = document.getElementById("fontIncreaseBtn");
+const speakPageBtn = document.getElementById("speakPageBtn");
 
 // Alle wichtigen DOM-Elemente werden einmal am Anfang gespeichert.
 // Dadurch muessen sie spaeter nicht immer wieder neu gesucht werden.
@@ -16,6 +19,10 @@ const cartEmptyEl = document.getElementById("cartEmpty");
 const cartTotalEl = document.getElementById("cartTotal");
 const clearCartBtn = document.getElementById("clearCartBtn");
 const checkoutBtn = document.getElementById("checkoutBtn");
+const checkoutForm = document.getElementById("checkoutForm");
+const deliveryAddressInput = document.getElementById("deliveryAddressInput");
+const testDeliveryMapBtn = document.getElementById("testDeliveryMapBtn");
+const checkoutStatus = document.getElementById("checkoutStatus");
 
 const productModal = document.getElementById("productModal");
 const productModalBackdrop = document.getElementById("productModalBackdrop");
@@ -28,7 +35,10 @@ const productModalSize = document.getElementById("productModalSize");
 const productModalConcentration = document.getElementById("productModalConcentration");
 const productModalGender = document.getElementById("productModalGender");
 const productModalNotes = document.getElementById("productModalNotes");
+const productModalStory = document.getElementById("productModalStory");
 const productModalIngredients = document.getElementById("productModalIngredients");
+const productModalSizeSelect = document.getElementById("productModalSizeSelect");
+const productModalPricePreview = document.getElementById("productModalPricePreview");
 
 const addProductForm = document.getElementById("addProductForm");
 const productFormStatus = document.getElementById("productFormStatus");
@@ -53,12 +63,22 @@ const currencyFormatter = new Intl.NumberFormat("de-DE", {
 // localStorage speichert Demo-Daten im Browser, auch nach einem Neuladen der Seite.
 const CART_STORAGE_KEY = "aestas_cart";
 const PRODUCTS_STORAGE_KEY = "aestas_custom_products";
+const FONT_SCALE_KEY = "aestas_font_scale";
+
+// Die Preisstaffel macht groessere Flakons im Verhaeltnis guenstiger.
+const SIZE_OPTIONS = {
+  3: { label: "3 ml Probe", multiplier: 0.09 },
+  25: { label: "25 ml Reisegröße", multiplier: 0.34 },
+  50: { label: "50 ml Standard", multiplier: 0.6 },
+  100: { label: "100 ml Vorteilspreis", multiplier: 1 },
+};
 
 let cart = normalizeCart(loadFromStorage(CART_STORAGE_KEY, []));
 let activeFilter = "all";
 let activeSearch = "";
 let selectedProduct = null;
 let lastFocusedElement = null;
+let fontScale = Number(localStorage.getItem(FONT_SCALE_KEY)) || 100;
 
 // Eigenleistung: Die Antworten sind bewusst lokal, damit keine Chatdaten an einen Server gesendet werden.
 const supportReplies = {
@@ -100,11 +120,15 @@ const aiReplies = [
   },
   {
     keywords: ["größe", "groesse", "ml", "inhalt"],
-    text: "Die Größen stehen in den Produktdetails. Klicke bei einem Parfum auf 'Mehr Infos', dann siehst du Größe, Konzentration, Duftnoten und Inhaltsstoffe.",
+    text: "Klicke bei einem Parfum auf 'Mehr Infos'. Dort kannst du 3 ml, 25 ml, 50 ml oder 100 ml auswählen. Je größer der Flakon, desto günstiger wird der Preis pro ml.",
   },
   {
-    keywords: ["warenkorb", "korb", "kaufen"],
-    text: "Du kannst ein Parfum über 'In den Warenkorb' hinzufügen. Im Warenkorb kannst du Mengen ändern oder Artikel entfernen.",
+    keywords: ["warenkorb", "korb", "kaufen", "checkout", "adresse", "maps"],
+    text: "Lege dein Parfum in den Warenkorb, gib eine Lieferadresse ein und teste sie mit der Maps-Schaltfläche. Der Checkout ist als Demo vorbereitet.",
+  },
+  {
+    keywords: ["barrierefrei", "vorlesen", "schrift", "größer", "groesser"],
+    text: "Oben im Header kannst du die Schrift kleiner oder größer stellen und den Seitentext vorlesen lassen. Fokusrahmen und Alt-Texte helfen zusätzlich.",
   },
 ];
 
@@ -134,24 +158,41 @@ function saveToStorage(key, value) {
   localStorage.setItem(key, JSON.stringify(value));
 }
 
+function getSizeOption(sizeMl) {
+  return SIZE_OPTIONS[sizeMl] || SIZE_OPTIONS[100];
+}
+
+function calculateSizePrice(basePrice, sizeMl) {
+  const option = getSizeOption(sizeMl);
+  return Math.round(basePrice * option.multiplier * 100) / 100;
+}
+
+function getCartKey(name, sizeMl) {
+  return `${name}__${sizeMl}`;
+}
+
 function normalizeCart(rawCart) {
   const cleaned = [];
   rawCart.forEach((item) => {
     const name = String(item.name || "").trim();
     const price = Number(item.price);
     const quantity = Number(item.quantity);
+    const sizeMl = Number(item.sizeMl || 100);
+    const sizeOption = getSizeOption(sizeMl);
 
     if (!name || !Number.isFinite(price) || price <= 0 || !Number.isFinite(quantity) || quantity <= 0) {
       return;
     }
 
-    const existingItem = cleaned.find((entry) => entry.name === name);
+    const existingItem = cleaned.find((entry) => getCartKey(entry.name, entry.sizeMl) === getCartKey(name, sizeMl));
     if (existingItem) {
       existingItem.quantity += Math.round(quantity);
     } else {
       cleaned.push({
         name,
         price,
+        sizeMl,
+        sizeLabel: sizeOption.label,
         quantity: Math.round(quantity),
       });
     }
@@ -197,6 +238,36 @@ function setProductModalOpen(open) {
   }
 }
 
+function applyFontScale() {
+  // Barrierefreiheit: Die Schriftgroesse wird gespeichert und gilt nach dem Neuladen weiter.
+  fontScale = Math.min(125, Math.max(90, fontScale));
+  document.documentElement.style.fontSize = `${fontScale}%`;
+  localStorage.setItem(FONT_SCALE_KEY, String(fontScale));
+}
+
+function speakPageSummary() {
+  // Die Vorlesefunktion nutzt die Browser-eigene Sprachausgabe und sendet keine Daten nach aussen.
+  if (!("speechSynthesis" in window)) {
+    return;
+  }
+
+  if (window.speechSynthesis.speaking) {
+    window.speechSynthesis.cancel();
+    speakPageBtn.classList.remove("speak-active");
+    return;
+  }
+
+  const heroText = document.querySelector(".hero-content")?.innerText || "";
+  const shopText = document.querySelector("#shop .section-head")?.innerText || "";
+  const utterance = new SpeechSynthesisUtterance(
+    `${heroText}. ${shopText}. Produktdetails enthalten Größe, Inhalt, Duftnoten und Hintergrundgeschichte.`
+  );
+  utterance.lang = "de-DE";
+  utterance.onend = () => speakPageBtn.classList.remove("speak-active");
+  speakPageBtn.classList.add("speak-active");
+  window.speechSynthesis.speak(utterance);
+}
+
 function getCardData(card) {
   // Aus einer Produktkarte werden Name und Preis fuer den Warenkorb ausgelesen.
   const nameFromDataset = card.dataset.name;
@@ -227,8 +298,21 @@ function getProductDetails(card) {
     concentration: card.dataset.concentration || "Eau de Parfum",
     genderText,
     notes: card.dataset.notes || description,
+    story: card.dataset.story || "Dieser Duft wurde als kurze Projektgeschichte passend zur Duftfamilie beschrieben.",
     ingredients: card.dataset.ingredients || "Alcohol Denat., Parfum, Aqua",
   };
+}
+
+function updateModalPricePreview() {
+  if (!selectedProduct) {
+    return;
+  }
+
+  const sizeMl = Number(productModalSizeSelect.value || 100);
+  const sizeOption = getSizeOption(sizeMl);
+  const selectedPrice = calculateSizePrice(selectedProduct.price, sizeMl);
+  const pricePerMl = selectedPrice / sizeMl;
+  productModalPricePreview.textContent = `Auswahl: ${sizeOption.label} · ${formatEur(selectedPrice)} · ${formatEur(pricePerMl)} pro ml`;
 }
 
 function openProductDetails(card) {
@@ -244,7 +328,10 @@ function openProductDetails(card) {
   productModalConcentration.textContent = selectedProduct.concentration;
   productModalGender.textContent = selectedProduct.genderText;
   productModalNotes.textContent = selectedProduct.notes;
+  productModalStory.textContent = selectedProduct.story;
   productModalIngredients.textContent = selectedProduct.ingredients;
+  productModalSizeSelect.value = "100";
+  updateModalPricePreview();
   productModalCartBtn.setAttribute("aria-label", `${selectedProduct.name} in den Warenkorb legen`);
 
   setProductModalOpen(true);
@@ -266,14 +353,14 @@ function renderCart() {
   cart.forEach((item) => {
     const li = document.createElement("li");
     li.className = "cart-item";
-    li.dataset.name = item.name;
+    li.dataset.key = getCartKey(item.name, item.sizeMl);
 
     const top = document.createElement("div");
     top.className = "cart-item-top";
 
     const itemName = document.createElement("span");
     itemName.className = "cart-item-name";
-    itemName.textContent = item.name;
+    itemName.textContent = `${item.name} · ${item.sizeLabel || "100 ml Vorteilspreis"}`;
 
     const itemPrice = document.createElement("span");
     itemPrice.className = "cart-item-price";
@@ -291,7 +378,7 @@ function renderCart() {
     minusBtn.className = "qty-btn";
     minusBtn.type = "button";
     minusBtn.dataset.action = "decrease";
-    minusBtn.dataset.name = item.name;
+    minusBtn.dataset.key = getCartKey(item.name, item.sizeMl);
     minusBtn.setAttribute("aria-label", "Menge reduzieren");
     minusBtn.innerHTML = '<i data-lucide="minus"></i>';
 
@@ -303,7 +390,7 @@ function renderCart() {
     plusBtn.className = "qty-btn";
     plusBtn.type = "button";
     plusBtn.dataset.action = "increase";
-    plusBtn.dataset.name = item.name;
+    plusBtn.dataset.key = getCartKey(item.name, item.sizeMl);
     plusBtn.setAttribute("aria-label", "Menge erhöhen");
     plusBtn.innerHTML = '<i data-lucide="plus"></i>';
 
@@ -313,7 +400,7 @@ function renderCart() {
     removeBtn.className = "remove-btn";
     removeBtn.type = "button";
     removeBtn.dataset.action = "remove";
-    removeBtn.dataset.name = item.name;
+    removeBtn.dataset.key = getCartKey(item.name, item.sizeMl);
     removeBtn.innerHTML = '<i data-lucide="trash-2"></i>Entfernen';
 
     controls.append(qtyControl, removeBtn);
@@ -325,13 +412,15 @@ function renderCart() {
   saveToStorage(CART_STORAGE_KEY, cart);
 }
 
-// Eigenleistung: Warenkorb-Einträge werden nach Produktnamen zusammengefasst und lokal gespeichert.
+// Eigenleistung: Warenkorb-Einträge werden nach Produkt und gewaehlter Groesse zusammengefasst.
 function addToCart(product) {
   if (!product?.name || !Number.isFinite(product.price) || product.price <= 0) {
     return;
   }
 
-  const existingItem = cart.find((item) => item.name === product.name);
+  const sizeMl = Number(product.sizeMl || 100);
+  const sizeOption = getSizeOption(sizeMl);
+  const existingItem = cart.find((item) => getCartKey(item.name, item.sizeMl) === getCartKey(product.name, sizeMl));
 
   if (existingItem) {
     existingItem.quantity += 1;
@@ -339,6 +428,8 @@ function addToCart(product) {
     cart.push({
       name: product.name,
       price: product.price,
+      sizeMl,
+      sizeLabel: sizeOption.label,
       quantity: 1,
     });
   }
@@ -378,6 +469,7 @@ function createProductCard({ name, price, category, gender, image, description }
   card.dataset.size = "75 ml";
   card.dataset.concentration = "Eau de Parfum";
   card.dataset.notes = description;
+  card.dataset.story = `${name} wurde im Produktformular angelegt und ergänzt das Sortiment als eigene Projektidee.`;
   card.dataset.ingredients = "Alcohol Denat., Parfum, Aqua";
   const imageEl = document.createElement("img");
   imageEl.src = image;
@@ -480,7 +572,7 @@ productGrid.addEventListener("click", (event) => {
 
   if (addButton) {
     const product = getCardData(card);
-    addToCart(product);
+    addToCart({ ...product, price: calculateSizePrice(product.price, 100), sizeMl: 100 });
     return;
   }
 
@@ -519,8 +611,8 @@ cartItemsEl.addEventListener("click", (event) => {
   }
 
   const action = actionButton.dataset.action;
-  const name = actionButton.dataset.name;
-  const item = cart.find((entry) => entry.name === name);
+  const key = actionButton.dataset.key;
+  const item = cart.find((entry) => getCartKey(entry.name, entry.sizeMl) === key);
   if (!item) {
     return;
   }
@@ -530,10 +622,10 @@ cartItemsEl.addEventListener("click", (event) => {
   } else if (action === "decrease") {
     item.quantity -= 1;
     if (item.quantity <= 0) {
-      cart = cart.filter((entry) => entry.name !== name);
+      cart = cart.filter((entry) => getCartKey(entry.name, entry.sizeMl) !== key);
     }
   } else if (action === "remove") {
-    cart = cart.filter((entry) => entry.name !== name);
+    cart = cart.filter((entry) => getCartKey(entry.name, entry.sizeMl) !== key);
   }
 
   renderCart();
@@ -545,9 +637,21 @@ clearCartBtn.addEventListener("click", () => {
 });
 
 checkoutBtn.addEventListener("click", () => {
+  const address = deliveryAddressInput.value.trim();
+  if (!cart.length) {
+    checkoutStatus.textContent = "Der Warenkorb ist noch leer.";
+    return;
+  }
+  if (!address) {
+    checkoutStatus.textContent = "Bitte zuerst eine Lieferadresse eingeben.";
+    deliveryAddressInput.focus();
+    return;
+  }
+
+  checkoutStatus.textContent = `Checkout-Demo bereit für: ${address}`;
   appendChatMessage(
     supportMessages,
-    "Support: Checkout wurde als Demo ausgelöst. Für den Live-Betrieb können wir als nächstes Stripe anbinden.",
+    "Support: Checkout wurde als Demo ausgelöst. Adresse und Warenkorb wurden lokal geprüft.",
     "agent"
   );
   setDrawerOpen(false);
@@ -575,10 +679,17 @@ productModalCartBtn.addEventListener("click", () => {
   if (!selectedProduct) {
     return;
   }
-  addToCart({ name: selectedProduct.name, price: selectedProduct.price });
+  const sizeMl = Number(productModalSizeSelect.value || 100);
+  addToCart({
+    name: selectedProduct.name,
+    price: calculateSizePrice(selectedProduct.price, sizeMl),
+    sizeMl,
+  });
   setProductModalOpen(false);
   setDrawerOpen(true);
 });
+
+productModalSizeSelect.addEventListener("change", updateModalPricePreview);
 
 addProductForm.addEventListener("submit", (event) => {
   // Das Produktformular erstellt eine neue Karte, ohne die Seite neu zu laden.
@@ -626,6 +737,24 @@ mapSearchForm.addEventListener("submit", (event) => {
   mapFrame.src = `https://www.google.com/maps?q=${encodeURIComponent(query)}&output=embed`;
 });
 
+testDeliveryMapBtn.addEventListener("click", () => {
+  // Das Lieferfeld testet dieselbe Karte wie die Filialsuche und zeigt sofort eine Rueckmeldung.
+  const query = deliveryAddressInput.value.trim();
+  if (!query) {
+    checkoutStatus.textContent = "Bitte eine Lieferadresse eintragen.";
+    deliveryAddressInput.focus();
+    return;
+  }
+
+  mapFrame.src = `https://www.google.com/maps?q=${encodeURIComponent(query)}&output=embed`;
+  checkoutStatus.textContent = `Adresse wurde in Maps getestet: ${query}`;
+  document.getElementById("filiale").scrollIntoView({ behavior: "smooth", block: "start" });
+});
+
+checkoutForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+});
+
 aiChatForm.addEventListener("submit", (event) => {
   // Der KI-Chat antwortet zeitverzoegert, damit es wie ein kurzer Dialog wirkt.
   event.preventDefault();
@@ -658,6 +787,19 @@ supportChatForm.addEventListener("submit", (event) => {
   }, 420);
 });
 
+fontDecreaseBtn.addEventListener("click", () => {
+  fontScale -= 5;
+  applyFontScale();
+});
+
+fontIncreaseBtn.addEventListener("click", () => {
+  fontScale += 5;
+  applyFontScale();
+});
+
+speakPageBtn.addEventListener("click", speakPageSummary);
+
+applyFontScale();
 renderCustomProducts();
 renderCart();
 applyFilter();
