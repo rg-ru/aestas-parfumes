@@ -1,151 +1,86 @@
-const productGrid = document.getElementById("productGrid");
-const bagCount = document.getElementById("bagCount");
-const filterButtons = Array.from(document.querySelectorAll(".filter-btn"));
-const searchFocusBtn = document.getElementById("searchFocusBtn");
-const shopSearchInput = document.getElementById("shopSearchInput");
-const fontDecreaseBtn = document.getElementById("fontDecreaseBtn");
-const fontIncreaseBtn = document.getElementById("fontIncreaseBtn");
-const speakPageBtn = document.getElementById("speakPageBtn");
-
-// Alle wichtigen DOM-Elemente werden einmal am Anfang gespeichert.
-// Dadurch muessen sie spaeter nicht immer wieder neu gesucht werden.
-const cartToggleBtn = document.getElementById("cartToggleBtn");
-const cartCloseBtn = document.getElementById("cartCloseBtn");
-const openCartFromSection = document.getElementById("openCartFromSection");
-const drawerBackdrop = document.getElementById("drawerBackdrop");
-const cartDrawer = document.getElementById("cartDrawer");
-const cartItemsEl = document.getElementById("cartItems");
-const cartEmptyEl = document.getElementById("cartEmpty");
-const cartTotalEl = document.getElementById("cartTotal");
-const clearCartBtn = document.getElementById("clearCartBtn");
-const checkoutBtn = document.getElementById("checkoutBtn");
-const checkoutForm = document.getElementById("checkoutForm");
-const deliveryAddressInput = document.getElementById("deliveryAddressInput");
-const testDeliveryMapBtn = document.getElementById("testDeliveryMapBtn");
-const checkoutStatus = document.getElementById("checkoutStatus");
-
-const productModal = document.getElementById("productModal");
-const productModalBackdrop = document.getElementById("productModalBackdrop");
-const productModalClose = document.getElementById("productModalClose");
-const productModalCartBtn = document.getElementById("productModalCartBtn");
-const productModalTitle = document.getElementById("productModalTitle");
-const productModalDescription = document.getElementById("productModalDescription");
-const productModalImage = document.getElementById("productModalImage");
-const productModalSize = document.getElementById("productModalSize");
-const productModalConcentration = document.getElementById("productModalConcentration");
-const productModalGender = document.getElementById("productModalGender");
-const productModalNotes = document.getElementById("productModalNotes");
-const productModalStory = document.getElementById("productModalStory");
-const productModalIngredients = document.getElementById("productModalIngredients");
-const productModalSizeSelect = document.getElementById("productModalSizeSelect");
-const productModalPricePreview = document.getElementById("productModalPricePreview");
-
-const addProductForm = document.getElementById("addProductForm");
-const productFormStatus = document.getElementById("productFormStatus");
-
-const mapSearchForm = document.getElementById("mapSearchForm");
-const mapAddressInput = document.getElementById("mapAddressInput");
-const mapFrame = document.getElementById("mapFrame");
-
-const aiChatForm = document.getElementById("aiChatForm");
-const aiInput = document.getElementById("aiInput");
-const aiMessages = document.getElementById("aiMessages");
-
-const supportChatForm = document.getElementById("supportChatForm");
-const supportInput = document.getElementById("supportInput");
-const supportMessages = document.getElementById("supportMessages");
-
-const currencyFormatter = new Intl.NumberFormat("de-DE", {
-  style: "currency",
-  currency: "EUR",
-});
-
-// localStorage speichert Demo-Daten im Browser, auch nach einem Neuladen der Seite.
-const CART_STORAGE_KEY = "aestas_cart";
-const PRODUCTS_STORAGE_KEY = "aestas_custom_products";
-const FONT_SCALE_KEY = "aestas_font_scale";
-
-// Die Preisstaffel macht groessere Flakons im Verhaeltnis guenstiger.
-const SIZE_OPTIONS = {
-  3: { label: "3 ml Probe", multiplier: 0.09 },
-  25: { label: "25 ml Reisegröße", multiplier: 0.34 },
-  50: { label: "50 ml Standard", multiplier: 0.6 },
-  100: { label: "100 ml Vorteilspreis", multiplier: 1 },
+const STORAGE_KEYS = {
+  products: "aestas_products",
+  cart: "aestas_cart",
+  aiChat: "aestas_ai_chat",
+  supportChat: "aestas_support_chat",
 };
 
-let cart = normalizeCart(loadFromStorage(CART_STORAGE_KEY, []));
-let activeFilter = "all";
-let activeSearch = "";
-let selectedProduct = null;
-let lastFocusedElement = null;
-let fontScale = Number(localStorage.getItem(FONT_SCALE_KEY)) || 100;
-
-// Eigenleistung: Die Antworten sind bewusst lokal, damit keine Chatdaten an einen Server gesendet werden.
-const supportReplies = {
-  versand: "Support: Versand innerhalb Deutschlands dauert in der Regel 1-3 Werktage.",
-  rueckgabe: "Support: Rückgaben sind innerhalb von 14 Tagen möglich.",
-  rueckerstattung: "Support: Rückerstattungen werden nach Eingang innerhalb von 3 Werktagen verarbeitet.",
-  bestellung: "Support: Sende uns bitte deine Bestellnummer, dann prüfen wir den Status sofort.",
-  standard: "Support: Danke für die Nachricht. Ein Teammitglied meldet sich zeitnah mit Details.",
-};
-
-const aiReplies = [
+const DEFAULT_PRODUCTS = [
   {
-    keywords: ["herren", "mann", "männer", "eckig", "eckigen"],
-    text: "Für Herren empfehle ich die eckigen Flakons: Aestas Ruber, Aurum, Argentum, Viridis und Solis.",
+    id: "p-velvet-elixir",
+    name: "Velvet Elixir",
+    description: "Amber, Safran und ein ruhiger Vanille-Akkord für Abendstunden.",
+    price: 149.0,
+    image: "assets/images/lux-collection-1.jpg",
   },
   {
-    keywords: ["damen", "frau", "frauen", "rund", "runden"],
-    text: "Für Damen passen die runden Flakons: Aestas Luna, Stella, Alba, Flora und Rosa.",
+    id: "p-erba-luce",
+    name: "Erba Luce",
+    description: "Frische Zitrusnoten mit weicher Moschus-Basis.",
+    price: 128.0,
+    image: "assets/images/lux-collection-2.jpg",
   },
   {
-    keywords: ["oud", "intensiv", "stark"],
-    text: "Wenn du einen intensiven Duft suchst, passen Aestas Ruber oder Aestas Argentum besonders gut.",
+    id: "p-notte-nero",
+    name: "Notte Nero",
+    description: "Tiefes Holzprofil mit Oud und dunklen Gewürzen.",
+    price: 169.0,
+    image: "assets/images/img-16.jpg",
   },
   {
-    keywords: ["frisch", "fresh", "leicht", "sommer"],
-    text: "Für frische Düfte empfehle ich Aestas Alba, Aestas Luna oder Aestas Viridis.",
-  },
-  {
-    keywords: ["rose", "rosa", "blume", "floral"],
-    text: "Wenn du florale Düfte magst, schau dir Aestas Rosa und Aestas Flora an.",
-  },
-  {
-    keywords: ["haltbar", "haltbarkeit", "lange"],
-    text: "Sehr gute Haltbarkeit liefern vor allem Aestas Ruber, Aestas Aurum und Aestas Solis.",
-  },
-  {
-    keywords: ["geschenk", "geburtstag"],
-    text: "Als Geschenk sind Aestas Luna für Damen und Aestas Solis für Herren gute, elegante Optionen.",
-  },
-  {
-    keywords: ["größe", "groesse", "ml", "inhalt"],
-    text: "Klicke bei einem Parfum auf 'Mehr Infos'. Dort kannst du 3 ml, 25 ml, 50 ml oder 100 ml auswählen. Je größer der Flakon, desto günstiger wird der Preis pro ml.",
-  },
-  {
-    keywords: ["warenkorb", "korb", "kaufen", "checkout", "adresse", "maps"],
-    text: "Lege dein Parfum in den Warenkorb, gib eine Lieferadresse ein und teste sie mit der Maps-Schaltfläche. Der Checkout ist als Demo vorbereitet.",
-  },
-  {
-    keywords: ["barrierefrei", "vorlesen", "schrift", "größer", "groesser"],
-    text: "Oben im Header kannst du die Schrift kleiner oder größer stellen und den Seitentext vorlesen lassen. Fokusrahmen und Alt-Texte helfen zusätzlich.",
+    id: "p-cashmere-air",
+    name: "Cashmere Air",
+    description: "Leichter Tagesduft mit Iris, Tee und cleanen Noten.",
+    price: 112.0,
+    image: "assets/images/img-15.jpg",
   },
 ];
 
-function syncIcons() {
-  // Lucide ersetzt die data-lucide-Platzhalter durch echte SVG-Icons.
-  if (window.lucide) {
-    window.lucide.createIcons();
-  }
-}
+const productGrid = document.getElementById("product-grid");
+const productForm = document.getElementById("product-form");
+const productNameInput = document.getElementById("product-name");
+const productPriceInput = document.getElementById("product-price");
+const productImageInput = document.getElementById("product-image");
+const productDescriptionInput = document.getElementById("product-description");
+
+const cartDrawer = document.getElementById("cart-drawer");
+const openCartBtn = document.getElementById("open-cart-btn");
+const closeCartBtn = document.getElementById("close-cart-btn");
+const drawerBackdrop = document.getElementById("drawer-backdrop");
+const cartList = document.getElementById("cart-list");
+const cartTotal = document.getElementById("cart-total");
+const cartBadge = document.getElementById("cart-badge");
+const clearCartBtn = document.getElementById("clear-cart-btn");
+
+const addressForm = document.getElementById("address-form");
+const addressInput = document.getElementById("address-input");
+const addressFeedback = document.getElementById("address-feedback");
+const mapFrame = document.getElementById("map-frame");
+
+const aiChatMessages = document.getElementById("ai-chat-messages");
+const aiChatForm = document.getElementById("ai-chat-form");
+const aiChatInput = document.getElementById("ai-chat-input");
+
+const supportChatMessages = document.getElementById("support-chat-messages");
+const supportChatForm = document.getElementById("support-chat-form");
+const supportRole = document.getElementById("support-role");
+const supportChatInput = document.getElementById("support-chat-input");
+const clearSupportChatBtn = document.getElementById("clear-support-chat-btn");
+
+let products = loadFromStorage(STORAGE_KEYS.products, DEFAULT_PRODUCTS);
+let cart = loadFromStorage(STORAGE_KEYS.cart, []);
+let aiMessages = loadFromStorage(STORAGE_KEYS.aiChat, [
+  {
+    role: "assistant",
+    text: "Willkommen bei AESTAS. Ich helfe dir mit Duftempfehlungen, Preisen und Versand.",
+  },
+]);
+let supportMessages = loadFromStorage(STORAGE_KEYS.supportChat, []);
 
 function loadFromStorage(key, fallbackValue) {
-  // Fehlerhafte oder fehlende Speicherwerte werden abgefangen, damit die Seite stabil bleibt.
   try {
     const raw = localStorage.getItem(key);
-    if (!raw) {
-      return fallbackValue;
-    }
+    if (!raw) return fallbackValue;
     const parsed = JSON.parse(raw);
     return Array.isArray(parsed) ? parsed : fallbackValue;
   } catch {
@@ -154,653 +89,365 @@ function loadFromStorage(key, fallbackValue) {
 }
 
 function saveToStorage(key, value) {
-  // Arrays wie Warenkorb und eigene Produkte werden als JSON-Text gespeichert.
   localStorage.setItem(key, JSON.stringify(value));
 }
 
-function getSizeOption(sizeMl) {
-  return SIZE_OPTIONS[sizeMl] || SIZE_OPTIONS[100];
+function formatEUR(value) {
+  return `${value.toFixed(2).replace(".", ",")} EUR`;
 }
 
-function calculateSizePrice(basePrice, sizeMl) {
-  const option = getSizeOption(sizeMl);
-  return Math.round(basePrice * option.multiplier * 100) / 100;
-}
-
-function getCartKey(name, sizeMl) {
-  return `${name}__${sizeMl}`;
-}
-
-function normalizeCart(rawCart) {
-  const cleaned = [];
-  rawCart.forEach((item) => {
-    const name = String(item.name || "").trim();
-    const price = Number(item.price);
-    const quantity = Number(item.quantity);
-    const sizeMl = Number(item.sizeMl || 100);
-    const sizeOption = getSizeOption(sizeMl);
-
-    if (!name || !Number.isFinite(price) || price <= 0 || !Number.isFinite(quantity) || quantity <= 0) {
-      return;
-    }
-
-    const existingItem = cleaned.find((entry) => getCartKey(entry.name, entry.sizeMl) === getCartKey(name, sizeMl));
-    if (existingItem) {
-      existingItem.quantity += Math.round(quantity);
-    } else {
-      cleaned.push({
-        name,
-        price,
-        sizeMl,
-        sizeLabel: sizeOption.label,
-        quantity: Math.round(quantity),
-      });
-    }
-  });
-  return cleaned;
-}
-
-function formatEur(value) {
-  // Einheitliche deutsche Preisformatierung fuer Produktkarten und Warenkorb.
-  return currencyFormatter.format(value);
-}
-
-function parsePrice(text) {
-  const normalized = text.replace(",", ".").replace(/[^0-9.]/g, "");
-  const numeric = Number(normalized);
-  if (!Number.isFinite(numeric)) {
-    return 0;
+function normalizeImageUrl(rawValue) {
+  const value = rawValue.trim();
+  if (!value) return "assets/images/lux-collection-1.jpg";
+  if (value.startsWith("assets/")) return value;
+  try {
+    const url = new URL(value);
+    if (url.protocol === "https:" || url.protocol === "http:") return url.toString();
+  } catch {
+    return "assets/images/lux-collection-1.jpg";
   }
-  return numeric;
+  return "assets/images/lux-collection-1.jpg";
 }
 
-function setDrawerOpen(open) {
-  // Der Warenkorb wird als seitlicher Drawer geoeffnet und blockiert dabei den Hintergrund.
+function setCartDrawer(open) {
+  if (!cartDrawer || !drawerBackdrop || !openCartBtn) return;
   cartDrawer.classList.toggle("open", open);
   cartDrawer.setAttribute("aria-hidden", open ? "false" : "true");
-  drawerBackdrop.classList.toggle("open", open);
+  openCartBtn.setAttribute("aria-expanded", open ? "true" : "false");
   drawerBackdrop.hidden = !open;
-  document.body.classList.toggle("no-scroll", open);
+  document.body.style.overflow = open ? "hidden" : "";
 }
 
-function setProductModalOpen(open) {
-  // Der Produktdialog ist als modal gekennzeichnet und setzt den Fokus auf den Schliessen-Button.
-  productModal.classList.toggle("open", open);
-  productModal.setAttribute("aria-hidden", open ? "false" : "true");
-  productModalBackdrop.classList.toggle("open", open);
-  productModalBackdrop.hidden = !open;
-  document.body.classList.toggle("no-scroll", open);
-
-  if (open) {
-    productModalClose.focus();
-  } else if (lastFocusedElement) {
-    lastFocusedElement.focus();
-  }
+function findProduct(productId) {
+  return products.find((product) => product.id === productId);
 }
 
-function applyFontScale() {
-  // Barrierefreiheit: Die Schriftgroesse wird gespeichert und gilt nach dem Neuladen weiter.
-  fontScale = Math.min(125, Math.max(90, fontScale));
-  document.documentElement.style.fontSize = `${fontScale}%`;
-  localStorage.setItem(FONT_SCALE_KEY, String(fontScale));
-}
+function renderProducts() {
+  if (!productGrid) return;
+  productGrid.innerHTML = "";
 
-function speakPageSummary() {
-  // Die Vorlesefunktion nutzt die Browser-eigene Sprachausgabe und sendet keine Daten nach aussen.
-  if (!("speechSynthesis" in window)) {
-    return;
-  }
+  products.forEach((product) => {
+    const card = document.createElement("article");
+    card.className = "product-card";
 
-  if (window.speechSynthesis.speaking) {
-    window.speechSynthesis.cancel();
-    speakPageBtn.classList.remove("speak-active");
-    return;
-  }
+    const image = document.createElement("img");
+    image.loading = "lazy";
+    image.src = product.image;
+    image.alt = product.name;
 
-  const heroText = document.querySelector(".hero-content")?.innerText || "";
-  const shopText = document.querySelector("#shop .section-head")?.innerText || "";
-  const utterance = new SpeechSynthesisUtterance(
-    `${heroText}. ${shopText}. Produktdetails enthalten Größe, Inhalt, Duftnoten und Hintergrundgeschichte.`
-  );
-  utterance.lang = "de-DE";
-  utterance.onend = () => speakPageBtn.classList.remove("speak-active");
-  speakPageBtn.classList.add("speak-active");
-  window.speechSynthesis.speak(utterance);
-}
+    const body = document.createElement("div");
+    body.className = "product-body";
 
-function getCardData(card) {
-  // Aus einer Produktkarte werden Name und Preis fuer den Warenkorb ausgelesen.
-  const nameFromDataset = card.dataset.name;
-  const priceFromDataset = Number(card.dataset.price);
+    const title = document.createElement("h3");
+    title.className = "product-title";
+    title.textContent = product.name;
 
-  const name = nameFromDataset || card.querySelector("h3")?.textContent?.trim() || "Produkt";
+    const description = document.createElement("p");
+    description.className = "product-desc";
+    description.textContent = product.description;
 
-  if (Number.isFinite(priceFromDataset)) {
-    return { name, price: priceFromDataset };
-  }
+    const row = document.createElement("div");
+    row.className = "product-row";
 
-  const fallbackPriceText = card.querySelector(".product-meta span")?.textContent || "0";
-  return { name, price: parsePrice(fallbackPriceText) };
-}
+    const price = document.createElement("span");
+    price.className = "price";
+    price.textContent = formatEUR(product.price);
 
-function getProductDetails(card) {
-  // Detaildaten wie Groesse, Duftnoten und Inhaltsstoffe liegen als data-Attribute an der Karte.
-  const image = card.querySelector("img");
-  const description = card.querySelector(".product-info p")?.textContent?.trim() || "";
-  const genderText = card.dataset.gender === "herren" ? "Herrenparfum, eckiger Flakon" : "Damenparfum, runder Flakon";
+    const addButton = document.createElement("button");
+    addButton.type = "button";
+    addButton.className = "add-btn";
+    addButton.textContent = "Add to Cart";
+    addButton.dataset.productId = product.id;
 
-  return {
-    ...getCardData(card),
-    description,
-    image: image?.getAttribute("src") || "",
-    imageAlt: image?.getAttribute("alt") || "",
-    size: card.dataset.size || "75 ml",
-    concentration: card.dataset.concentration || "Eau de Parfum",
-    genderText,
-    notes: card.dataset.notes || description,
-    story: card.dataset.story || "Dieser Duft wurde als kurze Projektgeschichte passend zur Duftfamilie beschrieben.",
-    ingredients: card.dataset.ingredients || "Alcohol Denat., Parfum, Aqua",
-  };
-}
+    row.appendChild(price);
+    row.appendChild(addButton);
 
-function updateModalPricePreview() {
-  if (!selectedProduct) {
-    return;
-  }
+    body.appendChild(title);
+    body.appendChild(description);
+    body.appendChild(row);
+    card.appendChild(image);
+    card.appendChild(body);
 
-  const sizeMl = Number(productModalSizeSelect.value || 100);
-  const sizeOption = getSizeOption(sizeMl);
-  const selectedPrice = calculateSizePrice(selectedProduct.price, sizeMl);
-  const pricePerMl = selectedPrice / sizeMl;
-  productModalPricePreview.textContent = `Auswahl: ${sizeOption.label} · ${formatEur(selectedPrice)} · ${formatEur(pricePerMl)} pro ml`;
-}
-
-function openProductDetails(card) {
-  // Der Dialog wird dynamisch mit den Daten des angeklickten Parfums gefuellt.
-  selectedProduct = getProductDetails(card);
-  lastFocusedElement = document.activeElement;
-
-  productModalTitle.textContent = selectedProduct.name;
-  productModalDescription.textContent = selectedProduct.description;
-  productModalImage.src = selectedProduct.image;
-  productModalImage.alt = selectedProduct.imageAlt;
-  productModalSize.textContent = selectedProduct.size;
-  productModalConcentration.textContent = selectedProduct.concentration;
-  productModalGender.textContent = selectedProduct.genderText;
-  productModalNotes.textContent = selectedProduct.notes;
-  productModalStory.textContent = selectedProduct.story;
-  productModalIngredients.textContent = selectedProduct.ingredients;
-  productModalSizeSelect.value = "100";
-  updateModalPricePreview();
-  productModalCartBtn.setAttribute("aria-label", `${selectedProduct.name} in den Warenkorb legen`);
-
-  setProductModalOpen(true);
+    productGrid.appendChild(card);
+  });
 }
 
 function renderCart() {
-  // Der Warenkorb wird komplett neu gerendert, sobald sich Menge oder Inhalt aendern.
-  cartItemsEl.innerHTML = "";
+  if (!cartList || !cartTotal || !cartBadge) return;
+  cartList.innerHTML = "";
 
-  const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
-  const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-
-  bagCount.textContent = String(totalCount);
-  cartTotalEl.textContent = formatEur(totalPrice);
-  cartEmptyEl.hidden = cart.length > 0;
-  checkoutBtn.disabled = cart.length === 0;
-  clearCartBtn.disabled = cart.length === 0;
-
-  cart.forEach((item) => {
-    const li = document.createElement("li");
-    li.className = "cart-item";
-    li.dataset.key = getCartKey(item.name, item.sizeMl);
-
-    const top = document.createElement("div");
-    top.className = "cart-item-top";
-
-    const itemName = document.createElement("span");
-    itemName.className = "cart-item-name";
-    itemName.textContent = `${item.name} · ${item.sizeLabel || "100 ml Vorteilspreis"}`;
-
-    const itemPrice = document.createElement("span");
-    itemPrice.className = "cart-item-price";
-    itemPrice.textContent = formatEur(item.price);
-
-    top.append(itemName, itemPrice);
-
-    const controls = document.createElement("div");
-    controls.className = "cart-item-controls";
-
-    const qtyControl = document.createElement("div");
-    qtyControl.className = "qty-control";
-
-    const minusBtn = document.createElement("button");
-    minusBtn.className = "qty-btn";
-    minusBtn.type = "button";
-    minusBtn.dataset.action = "decrease";
-    minusBtn.dataset.key = getCartKey(item.name, item.sizeMl);
-    minusBtn.setAttribute("aria-label", "Menge reduzieren");
-    minusBtn.innerHTML = '<i data-lucide="minus"></i>';
-
-    const qtyValue = document.createElement("span");
-    qtyValue.className = "qty-value";
-    qtyValue.textContent = String(item.quantity);
-
-    const plusBtn = document.createElement("button");
-    plusBtn.className = "qty-btn";
-    plusBtn.type = "button";
-    plusBtn.dataset.action = "increase";
-    plusBtn.dataset.key = getCartKey(item.name, item.sizeMl);
-    plusBtn.setAttribute("aria-label", "Menge erhöhen");
-    plusBtn.innerHTML = '<i data-lucide="plus"></i>';
-
-    qtyControl.append(minusBtn, qtyValue, plusBtn);
-
-    const removeBtn = document.createElement("button");
-    removeBtn.className = "remove-btn";
-    removeBtn.type = "button";
-    removeBtn.dataset.action = "remove";
-    removeBtn.dataset.key = getCartKey(item.name, item.sizeMl);
-    removeBtn.innerHTML = '<i data-lucide="trash-2"></i>Entfernen';
-
-    controls.append(qtyControl, removeBtn);
-    li.append(top, controls);
-    cartItemsEl.appendChild(li);
-  });
-
-  syncIcons();
-  saveToStorage(CART_STORAGE_KEY, cart);
-}
-
-// Eigenleistung: Warenkorb-Einträge werden nach Produkt und gewaehlter Groesse zusammengefasst.
-function addToCart(product) {
-  if (!product?.name || !Number.isFinite(product.price) || product.price <= 0) {
+  if (cart.length === 0) {
+    const empty = document.createElement("li");
+    empty.className = "cart-empty";
+    empty.textContent = "Noch keine Produkte im Warenkorb.";
+    cartList.appendChild(empty);
+    cartTotal.textContent = formatEUR(0);
+    cartBadge.textContent = "0";
     return;
   }
 
-  const sizeMl = Number(product.sizeMl || 100);
-  const sizeOption = getSizeOption(sizeMl);
-  const existingItem = cart.find((item) => getCartKey(item.name, item.sizeMl) === getCartKey(product.name, sizeMl));
+  let total = 0;
+  let totalItems = 0;
 
+  cart.forEach((entry) => {
+    const product = findProduct(entry.productId);
+    if (!product) return;
+
+    total += product.price * entry.qty;
+    totalItems += entry.qty;
+
+    const line = document.createElement("li");
+    line.className = "cart-item";
+
+    const rowTop = document.createElement("div");
+    rowTop.className = "cart-line";
+
+    const name = document.createElement("strong");
+    name.textContent = product.name;
+
+    const linePrice = document.createElement("span");
+    linePrice.textContent = formatEUR(product.price * entry.qty);
+
+    rowTop.appendChild(name);
+    rowTop.appendChild(linePrice);
+
+    const rowBottom = document.createElement("div");
+    rowBottom.className = "cart-line";
+
+    const qty = document.createElement("span");
+    qty.textContent = `Menge: ${entry.qty}`;
+
+    const actions = document.createElement("div");
+    actions.className = "cart-actions";
+
+    const minus = document.createElement("button");
+    minus.type = "button";
+    minus.className = "small-btn";
+    minus.textContent = "-";
+    minus.dataset.action = "decrement";
+    minus.dataset.productId = product.id;
+
+    const plus = document.createElement("button");
+    plus.type = "button";
+    plus.className = "small-btn";
+    plus.textContent = "+";
+    plus.dataset.action = "increment";
+    plus.dataset.productId = product.id;
+
+    const remove = document.createElement("button");
+    remove.type = "button";
+    remove.className = "small-btn remove";
+    remove.textContent = "x";
+    remove.dataset.action = "remove";
+    remove.dataset.productId = product.id;
+
+    actions.appendChild(minus);
+    actions.appendChild(plus);
+    actions.appendChild(remove);
+
+    rowBottom.appendChild(qty);
+    rowBottom.appendChild(actions);
+    line.appendChild(rowTop);
+    line.appendChild(rowBottom);
+    cartList.appendChild(line);
+  });
+
+  cartTotal.textContent = formatEUR(total);
+  cartBadge.textContent = String(totalItems);
+}
+
+function addToCart(productId) {
+  const existingItem = cart.find((item) => item.productId === productId);
   if (existingItem) {
-    existingItem.quantity += 1;
+    existingItem.qty += 1;
   } else {
-    cart.push({
-      name: product.name,
-      price: product.price,
-      sizeMl,
-      sizeLabel: sizeOption.label,
-      quantity: 1,
-    });
+    cart.push({ productId, qty: 1 });
   }
-
+  saveToStorage(STORAGE_KEYS.cart, cart);
   renderCart();
 }
 
-// Eigenleistung: Kategorie-Filter und Suche wirken gleichzeitig auf die Produktkarten.
-function applyFilter() {
-  const cards = Array.from(productGrid.querySelectorAll(".product-card"));
-  cards.forEach((card) => {
-    const matchesCategory =
-      activeFilter === "all" || card.dataset.category === activeFilter || card.dataset.gender === activeFilter;
-    const searchableText = `${card.dataset.name || ""} ${card.textContent || ""}`.toLowerCase();
-    const matchesSearch = !activeSearch || searchableText.includes(activeSearch);
-    const visible = matchesCategory && matchesSearch;
-    card.hidden = !visible;
-  });
-}
-
-function setProductFormStatus(message, type) {
-  productFormStatus.textContent = message;
-  productFormStatus.classList.remove("success", "error");
-  if (type) {
-    productFormStatus.classList.add(type);
+function updateCartQuantity(productId, delta) {
+  const item = cart.find((entry) => entry.productId === productId);
+  if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) {
+    cart = cart.filter((entry) => entry.productId !== productId);
   }
-}
-
-function createProductCard({ name, price, category, gender, image, description }) {
-  // Neue Produkte aus dem Formular erhalten dieselbe Struktur wie die festen Produktkarten.
-  const card = document.createElement("article");
-  card.className = "product-card";
-  card.dataset.category = category;
-  card.dataset.gender = gender;
-  card.dataset.name = name;
-  card.dataset.price = String(price);
-  card.dataset.size = "75 ml";
-  card.dataset.concentration = "Eau de Parfum";
-  card.dataset.notes = description;
-  card.dataset.story = `${name} wurde im Produktformular angelegt und ergänzt das Sortiment als eigene Projektidee.`;
-  card.dataset.ingredients = "Alcohol Denat., Parfum, Aqua";
-  const imageEl = document.createElement("img");
-  imageEl.src = image;
-  imageEl.alt = `Parfum ${name}`;
-
-  const info = document.createElement("div");
-  info.className = "product-info";
-
-  const badge = document.createElement("span");
-  badge.className = `gender-badge ${gender === "herren" ? "gender-men" : "gender-women"}`;
-  badge.textContent = gender === "herren" ? "Herren · eckiger Flakon" : "Damen · runder Flakon";
-
-  const title = document.createElement("h3");
-  title.textContent = name;
-
-  const copy = document.createElement("p");
-  copy.textContent = description;
-
-  const meta = document.createElement("div");
-  meta.className = "product-meta";
-
-  const priceEl = document.createElement("span");
-  priceEl.textContent = `${Math.round(price * 100) / 100} EUR`;
-
-  const detailButton = document.createElement("button");
-  detailButton.className = "detail-btn";
-  detailButton.type = "button";
-  detailButton.textContent = "Mehr Infos";
-
-  const addButton = document.createElement("button");
-  addButton.className = "add-btn";
-  addButton.type = "button";
-  addButton.setAttribute("aria-label", `${name} in den Warenkorb legen`);
-  addButton.innerHTML = '<i data-lucide="plus"></i>In den Warenkorb';
-
-  meta.append(priceEl, detailButton, addButton);
-  info.append(badge, title, copy, meta);
-  card.append(imageEl, info);
-  return card;
-}
-
-function getCustomProducts() {
-  // Eigene Produkte kommen aus dem lokalen Browser-Speicher.
-  return loadFromStorage(PRODUCTS_STORAGE_KEY, []);
-}
-
-function saveCustomProduct(product) {
-  // Neue Produkte werden an die vorhandene Liste angehaengt.
-  const products = getCustomProducts();
-  products.push(product);
-  saveToStorage(PRODUCTS_STORAGE_KEY, products);
-}
-
-function renderCustomProducts() {
-  // Beim Laden der Seite werden eigene Produkte wieder in den Shop eingefuegt.
-  getCustomProducts().forEach((product) => {
-    productGrid.appendChild(createProductCard(product));
-  });
-}
-
-function appendChatMessage(container, text, role) {
-  // Neue Chatnachrichten werden unten angehaengt und der Chat scrollt automatisch mit.
-  const message = document.createElement("div");
-  message.className = `chat-message ${role}`;
-  message.textContent = text;
-  container.appendChild(message);
-  container.scrollTop = container.scrollHeight;
-}
-
-function getAiReply(userMessage) {
-  // Einfache lokale Wenn-Dann-Logik fuer Duftempfehlungen.
-  const text = userMessage.toLowerCase();
-  const reply = aiReplies.find((entry) => entry.keywords.some((keyword) => text.includes(keyword)));
-
-  if (reply) {
-    return reply.text;
-  }
-
-  return "Sag mir gern, ob du einen Damen- oder Herrenduft suchst und ob er frisch, warm oder intensiv sein soll. Dann gebe ich dir eine passende Empfehlung.";
-}
-
-function getSupportReply(userMessage) {
-  // Der Support-Chat erkennt typische Stichwoerter wie Versand oder Retoure.
-  const text = userMessage.toLowerCase();
-  if (text.includes("versand")) return supportReplies.versand;
-  if (text.includes("rückgabe") || text.includes("retoure")) return supportReplies.rueckgabe;
-  if (text.includes("rückerstattung")) return supportReplies.rueckerstattung;
-  if (text.includes("bestellung") || text.includes("order")) return supportReplies.bestellung;
-  return supportReplies.standard;
-}
-
-productGrid.addEventListener("click", (event) => {
-  // Ein Klick auf "In den Warenkorb" kauft nicht, sondern legt nur lokal in den Demo-Warenkorb.
-  const addButton = event.target.closest(".add-btn");
-  const detailButton = event.target.closest(".detail-btn");
-  const card = event.target.closest(".product-card");
-  if (!card) {
-    return;
-  }
-
-  if (addButton) {
-    const product = getCardData(card);
-    addToCart({ ...product, price: calculateSizePrice(product.price, 100), sizeMl: 100 });
-    return;
-  }
-
-  if (detailButton || !event.target.closest("button")) {
-    openProductDetails(card);
-    return;
-  }
-});
-
-filterButtons.forEach((button) => {
-  // Jeder Filter-Button aktualisiert den aktiven Filter und blendet unpassende Produkte aus.
-  button.addEventListener("click", () => {
-    activeFilter = button.dataset.filter || "all";
-    filterButtons.forEach((btn) => btn.classList.remove("active"));
-    button.classList.add("active");
-    applyFilter();
-  });
-});
-
-searchFocusBtn.addEventListener("click", () => {
-  // Der Suchbutton im Header springt direkt zur Produktsuche.
-  document.getElementById("shop").scrollIntoView({ behavior: "smooth", block: "start" });
-  shopSearchInput.focus({ preventScroll: true });
-});
-
-shopSearchInput.addEventListener("input", () => {
-  activeSearch = shopSearchInput.value.trim().toLowerCase();
-  applyFilter();
-});
-
-cartItemsEl.addEventListener("click", (event) => {
-  // Warenkorb-Buttons steuern Mengen: plus, minus oder entfernen.
-  const actionButton = event.target.closest("button[data-action]");
-  if (!actionButton) {
-    return;
-  }
-
-  const action = actionButton.dataset.action;
-  const key = actionButton.dataset.key;
-  const item = cart.find((entry) => getCartKey(entry.name, entry.sizeMl) === key);
-  if (!item) {
-    return;
-  }
-
-  if (action === "increase") {
-    item.quantity += 1;
-  } else if (action === "decrease") {
-    item.quantity -= 1;
-    if (item.quantity <= 0) {
-      cart = cart.filter((entry) => getCartKey(entry.name, entry.sizeMl) !== key);
-    }
-  } else if (action === "remove") {
-    cart = cart.filter((entry) => getCartKey(entry.name, entry.sizeMl) !== key);
-  }
-
+  saveToStorage(STORAGE_KEYS.cart, cart);
   renderCart();
+}
+
+function removeFromCart(productId) {
+  cart = cart.filter((entry) => entry.productId !== productId);
+  saveToStorage(STORAGE_KEYS.cart, cart);
+  renderCart();
+}
+
+function renderAiMessages() {
+  if (!aiChatMessages) return;
+  aiChatMessages.innerHTML = "";
+  aiMessages.forEach((message) => {
+    const bubble = document.createElement("div");
+    bubble.className = `bubble ${message.role}`;
+    bubble.textContent = message.text;
+    aiChatMessages.appendChild(bubble);
+  });
+  aiChatMessages.scrollTop = aiChatMessages.scrollHeight;
+}
+
+function getAIBotReply(userText) {
+  const text = userText.toLowerCase();
+  const hasProducts = products.length > 0;
+
+  if (text.includes("versand") || text.includes("lieferung")) {
+    return "Standardversand dauert 2-4 Werktage. Expressversand kann als Checkout-Option aktiviert werden.";
+  }
+  if (text.includes("preis") || text.includes("kosten")) {
+    if (!hasProducts) return "Aktuell sind noch keine Produkte hinterlegt.";
+    const prices = products.map((product) => product.price);
+    return `Der aktuelle Preisrahmen liegt bei ${formatEUR(Math.min(...prices))} bis ${formatEUR(Math.max(...prices))}.`;
+  }
+  if (text.includes("empfehl") || text.includes("duft")) {
+    if (!hasProducts) return "Sobald Produkte angelegt sind, kann ich dir konkrete Empfehlungen geben.";
+    const suggestion = products[Math.floor(Math.random() * products.length)];
+    return `Empfehlung: ${suggestion.name} für ${formatEUR(suggestion.price)}. ${suggestion.description}`;
+  }
+  if (text.includes("warenkorb")) {
+    const items = cart.reduce((sum, entry) => sum + entry.qty, 0);
+    const total = cart.reduce((sum, entry) => {
+      const product = findProduct(entry.productId);
+      return product ? sum + product.price * entry.qty : sum;
+    }, 0);
+    return `Im Warenkorb sind ${items} Artikel mit Gesamtwert ${formatEUR(total)}.`;
+  }
+  if (text.includes("adresse") || text.includes("maps") || text.includes("karte")) {
+    return "Nutze das Feld im Bereich Boutique Finder, die Karte zentriert sich direkt auf die eingegebene Adresse.";
+  }
+  return "Ich helfe zu Duftprofilen, Preisen, Versand, Adresse und Warenkorb.";
+}
+
+function renderSupportMessages() {
+  if (!supportChatMessages) return;
+  supportChatMessages.innerHTML = "";
+  if (supportMessages.length === 0) {
+    const info = document.createElement("div");
+    info.className = "bubble support";
+    info.textContent = "Noch keine Support-Nachrichten.";
+    supportChatMessages.appendChild(info);
+    return;
+  }
+
+  supportMessages.forEach((message) => {
+    const bubble = document.createElement("div");
+    bubble.className = `bubble ${message.role}`;
+    bubble.textContent = `${message.role === "support" ? "Support" : "Kunde"}: ${message.text}`;
+    supportChatMessages.appendChild(bubble);
+  });
+  supportChatMessages.scrollTop = supportChatMessages.scrollHeight;
+}
+
+productForm?.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const name = productNameInput.value.trim();
+  const description = productDescriptionInput.value.trim();
+  const price = Number(productPriceInput.value);
+  const image = normalizeImageUrl(productImageInput.value);
+
+  if (!name || !description || Number.isNaN(price) || price < 0) return;
+
+  const product = {
+    id: `p-${Date.now()}`,
+    name,
+    description,
+    price,
+    image,
+  };
+
+  products = [product, ...products];
+  saveToStorage(STORAGE_KEYS.products, products);
+  renderProducts();
+  productForm.reset();
 });
 
-clearCartBtn.addEventListener("click", () => {
+productGrid?.addEventListener("click", (event) => {
+  const button = event.target.closest("button[data-product-id]");
+  if (!button) return;
+  addToCart(button.dataset.productId);
+});
+
+cartList?.addEventListener("click", (event) => {
+  const button = event.target.closest("button[data-action]");
+  if (!button) return;
+
+  const { action, productId } = button.dataset;
+  if (action === "increment") updateCartQuantity(productId, 1);
+  if (action === "decrement") updateCartQuantity(productId, -1);
+  if (action === "remove") removeFromCart(productId);
+});
+
+clearCartBtn?.addEventListener("click", () => {
   cart = [];
+  saveToStorage(STORAGE_KEYS.cart, cart);
   renderCart();
 });
 
-checkoutBtn.addEventListener("click", () => {
-  const address = deliveryAddressInput.value.trim();
-  if (!cart.length) {
-    checkoutStatus.textContent = "Der Warenkorb ist noch leer.";
-    return;
-  }
-  if (!address) {
-    checkoutStatus.textContent = "Bitte zuerst eine Lieferadresse eingeben.";
-    deliveryAddressInput.focus();
-    return;
-  }
-
-  checkoutStatus.textContent = `Checkout-Demo bereit für: ${address}`;
-  appendChatMessage(
-    supportMessages,
-    "Support: Checkout wurde als Demo ausgelöst. Adresse und Warenkorb wurden lokal geprüft.",
-    "agent"
-  );
-  setDrawerOpen(false);
+openCartBtn?.addEventListener("click", () => {
+  setCartDrawer(true);
 });
 
-cartToggleBtn.addEventListener("click", () => setDrawerOpen(true));
-openCartFromSection.addEventListener("click", () => setDrawerOpen(true));
-cartCloseBtn.addEventListener("click", () => setDrawerOpen(false));
-drawerBackdrop.addEventListener("click", () => setDrawerOpen(false));
+closeCartBtn?.addEventListener("click", () => {
+  setCartDrawer(false);
+});
+
+drawerBackdrop?.addEventListener("click", () => {
+  setCartDrawer(false);
+});
 
 document.addEventListener("keydown", (event) => {
-  // Escape schliesst zuerst den Produktdialog, sonst den Warenkorb.
-  if (event.key === "Escape" && productModal.classList.contains("open")) {
-    setProductModalOpen(false);
-    return;
-  }
-  if (event.key === "Escape") {
-    setDrawerOpen(false);
-  }
+  if (event.key === "Escape") setCartDrawer(false);
 });
 
-productModalClose.addEventListener("click", () => setProductModalOpen(false));
-productModalBackdrop.addEventListener("click", () => setProductModalOpen(false));
-productModalCartBtn.addEventListener("click", () => {
-  if (!selectedProduct) {
-    return;
-  }
-  const sizeMl = Number(productModalSizeSelect.value || 100);
-  addToCart({
-    name: selectedProduct.name,
-    price: calculateSizePrice(selectedProduct.price, sizeMl),
-    sizeMl,
-  });
-  setProductModalOpen(false);
-  setDrawerOpen(true);
-});
-
-productModalSizeSelect.addEventListener("change", updateModalPricePreview);
-
-addProductForm.addEventListener("submit", (event) => {
-  // Das Produktformular erstellt eine neue Karte, ohne die Seite neu zu laden.
+addressForm?.addEventListener("submit", (event) => {
   event.preventDefault();
-  setProductFormStatus("", null);
-
-  const formData = new FormData(addProductForm);
-  const name = String(formData.get("name") || "").trim();
-  const description = String(formData.get("description") || "").trim();
-  const image = String(formData.get("image") || "").trim();
-  const category = String(formData.get("category") || "").trim();
-  const gender = String(formData.get("gender") || "").trim();
-  const price = Number(String(formData.get("price") || "").replace(",", "."));
-
-  // Eingaben werden geprüft, bevor eine neue Produktkarte im DOM erstellt wird.
-  if (!name || !description || !image || !category || !gender || !Number.isFinite(price) || price <= 0) {
-    setProductFormStatus("Bitte alle Felder korrekt ausfüllen.", "error");
-    return;
-  }
-
-  const card = createProductCard({
-    name,
-    price,
-    category,
-    gender,
-    image,
-    description,
-  });
-
-  productGrid.appendChild(card);
-  saveCustomProduct({ name, price, category, gender, image, description });
-  addProductForm.reset();
-  setProductFormStatus(`Produkt "${name}" wurde hinzugefügt.`, "success");
-  applyFilter();
-  syncIcons();
-});
-
-mapSearchForm.addEventListener("submit", (event) => {
-  // Die Karte wird ueber die eingegebene Adresse neu geladen.
-  event.preventDefault();
-  const query = mapAddressInput.value.trim();
-  if (!query) {
-    return;
-  }
+  const query = addressInput.value.trim();
+  if (!query) return;
   mapFrame.src = `https://www.google.com/maps?q=${encodeURIComponent(query)}&output=embed`;
+  addressFeedback.textContent = `Aktuelle Karte: ${query}`;
 });
 
-testDeliveryMapBtn.addEventListener("click", () => {
-  // Das Lieferfeld testet dieselbe Karte wie die Filialsuche und zeigt sofort eine Rueckmeldung.
-  const query = deliveryAddressInput.value.trim();
-  if (!query) {
-    checkoutStatus.textContent = "Bitte eine Lieferadresse eintragen.";
-    deliveryAddressInput.focus();
-    return;
-  }
-
-  mapFrame.src = `https://www.google.com/maps?q=${encodeURIComponent(query)}&output=embed`;
-  checkoutStatus.textContent = `Adresse wurde in Maps getestet: ${query}`;
-  document.getElementById("filiale").scrollIntoView({ behavior: "smooth", block: "start" });
-});
-
-checkoutForm.addEventListener("submit", (event) => {
+aiChatForm?.addEventListener("submit", (event) => {
   event.preventDefault();
+  const message = aiChatInput.value.trim();
+  if (!message) return;
+
+  aiMessages.push({ role: "user", text: message });
+  aiMessages.push({ role: "assistant", text: getAIBotReply(message) });
+  saveToStorage(STORAGE_KEYS.aiChat, aiMessages);
+  renderAiMessages();
+  aiChatForm.reset();
 });
 
-aiChatForm.addEventListener("submit", (event) => {
-  // Der KI-Chat antwortet zeitverzoegert, damit es wie ein kurzer Dialog wirkt.
+supportChatForm?.addEventListener("submit", (event) => {
   event.preventDefault();
-  const message = aiInput.value.trim();
-  if (!message) {
-    return;
-  }
-
-  appendChatMessage(aiMessages, message, "user");
-  aiInput.value = "";
-
-  window.setTimeout(() => {
-    appendChatMessage(aiMessages, getAiReply(message), "bot");
-  }, 350);
+  const text = supportChatInput.value.trim();
+  if (!text) return;
+  const role = supportRole.value === "support" ? "support" : "kunde";
+  supportMessages.push({ role, text });
+  saveToStorage(STORAGE_KEYS.supportChat, supportMessages);
+  renderSupportMessages();
+  supportChatForm.reset();
 });
 
-supportChatForm.addEventListener("submit", (event) => {
-  // Der Support-Chat nutzt dieselbe Chatlogik, aber andere Antworttexte.
-  event.preventDefault();
-  const message = supportInput.value.trim();
-  if (!message) {
-    return;
-  }
-
-  appendChatMessage(supportMessages, message, "user");
-  supportInput.value = "";
-
-  window.setTimeout(() => {
-    appendChatMessage(supportMessages, getSupportReply(message), "agent");
-  }, 420);
+clearSupportChatBtn?.addEventListener("click", () => {
+  supportMessages = [];
+  saveToStorage(STORAGE_KEYS.supportChat, supportMessages);
+  renderSupportMessages();
 });
 
-fontDecreaseBtn.addEventListener("click", () => {
-  fontScale -= 5;
-  applyFontScale();
-});
-
-fontIncreaseBtn.addEventListener("click", () => {
-  fontScale += 5;
-  applyFontScale();
-});
-
-speakPageBtn.addEventListener("click", speakPageSummary);
-
-applyFontScale();
-renderCustomProducts();
+renderProducts();
 renderCart();
-applyFilter();
-syncIcons();
+renderAiMessages();
+renderSupportMessages();
+setCartDrawer(false);

@@ -1,55 +1,57 @@
 <!doctype html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Impressum | Aestas Parfumes</title>
   <meta name="robots" content="noindex,follow">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css?v=20260603-6">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; background: #f7f1e7; color: #2d2117; font-family: "Manrope", sans-serif; }
+    main { width: min(920px, calc(100% - 32px)); margin: 28px auto; }
+    .card { background: #fffaf4; border: 1px solid #dbc3a4; border-radius: 20px; padding: 24px; }
+    h1, h2 { font-family: "Cormorant Garamond", Georgia, serif; margin: 0 0 10px; line-height: 1.1; }
+    h1 { font-size: clamp(2.1rem, 5vw, 3rem); }
+    h2 { margin-top: 20px; font-size: 1.55rem; }
+    p, li { color: #5a4a39; }
+    ul { padding-left: 18px; }
+    a { color: #7b512a; font-weight: 700; text-decoration: none; }
+    .back { display: inline-block; margin-top: 18px; }
+  </style>
 </head>
 <body>
-  <header class="site-header">
-    <div class="container header-inner legal-header">
-      <a href="./index.html" class="brand">Aestas Parfumes</a>
-      <nav class="site-nav" aria-label="Seitennavigation">
-        <a href="./index.html">Start</a>
-        <a href="./shop.html">Shop</a>
-        <a href="./filiale.html">Filiale</a>
-        <a href="./chats.html">Chats</a>
-        <a href="./projekt.html">Projekt</a>
-        <a href="./datenschutz.html">Datenschutz</a>
-      </nav>
-    </div>
-  </header>
-
-  <main class="legal-page">
-    <section class="container legal-card">
-      <p class="eyebrow">Rechtliches</p>
+  <main>
+    <section class="card">
       <h1>Impressum</h1>
       <p>Angaben gemäß Paragraf 5 TMG.</p>
 
-      <h2>Projektbetreiber</h2>
+      <h2>Unternehmen</h2>
       <p>
         Aestas Parfumes<br>
-        Berlin, Deutschland
+        Musterstraße 1<br>
+        10115 Berlin<br>
+        Deutschland
       </p>
+
+      <h2>Vertreten durch</h2>
+      <p>Max Mustermann</p>
 
       <h2>Kontakt</h2>
       <p>
-        E-Mail: <a href="mailto:support@aestasparfumes.com">support@aestasparfumes.com</a><br>
+        E-Mail: <a href="mailto:contact@aestasparfumes.com">contact@aestasparfumes.com</a><br>
         Telefon: +49 176 62632223
       </p>
 
-      <h2>Hinweis zum Info-Projekt</h2>
+      <h2>Hinweis</h2>
       <p>
-        Diese Website ist ein Frontend- und Info-Projekt. Bitte ersetze diese Angaben vor
-        einem produktiven Einsatz durch die echten Unternehmensdaten.
+        Bitte ersetze alle Platzhalterdaten in diesem Impressum vor dem produktiven Einsatz
+        durch deine echten Unternehmensdaten.
       </p>
 
-      <a class="btn btn-outline" href="./index.html">Zurück zur Startseite</a>
+      <a class="back" href="index.html">Zurück zur Startseite</a>
     </section>
   </main>
 </body>
