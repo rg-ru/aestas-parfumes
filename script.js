@@ -539,16 +539,120 @@ function appendChatMessage(container, text, role) {
   container.scrollTop = container.scrollHeight;
 }
 
+function normalizeAiText(text) {
+  // Vereinheitlicht Eingaben, damit der Bot auch Umlaute, Grossschreibung und Tippvarianten erkennt.
+  return text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/ä/g, "ae")
+    .replace(/ö/g, "oe")
+    .replace(/ü/g, "ue")
+    .replace(/ß/g, "ss");
+}
+
+function includesAny(text, words) {
+  return words.some((word) => text.includes(normalizeAiText(word)));
+}
+
+function getCatalogProducts() {
+  // Der Bot liest die echten Produktkarten aus, statt eine zweite Produktliste zu pflegen.
+  return Array.from(productGrid.querySelectorAll(".product-card")).map((card) => ({
+    ...getProductDetails(card),
+    category: card.dataset.category || "",
+    gender: card.dataset.gender || "",
+    searchText: normalizeAiText(`${card.dataset.name || ""} ${card.textContent || ""} ${card.dataset.notes || ""} ${card.dataset.story || ""}`),
+  }));
+}
+
+function getRequestedSize(text) {
+  const match = text.match(/\b(3|25|50|100)\s*ml\b/);
+  return match ? Number(match[1]) : 100;
+}
+
+function getRequestedBudget(text) {
+  const match = text.match(/(?:unter|bis|maximal|max\.?|budget)\s*(\d{2,3})/);
+  return match ? Number(match[1]) : null;
+}
+
+function findMentionedProduct(products, text) {
+  return products.find((product) => {
+    const simpleName = normalizeAiText(product.name.replace("Aestas", "").trim());
+    return text.includes(normalizeAiText(product.name)) || text.includes(simpleName);
+  });
+}
+
+function scoreProduct(product, text, budget) {
+  let score = 0;
+
+  if (includesAny(text, ["damen", "frau", "frauen", "rund"]) && product.gender === "damen") score += 4;
+  if (includesAny(text, ["herren", "mann", "männer", "maenner", "eckig"]) && product.gender === "herren") score += 4;
+  if (includesAny(text, ["frisch", "leicht", "fresh", "sommer", "zitrisch"]) && product.category === "fresh") score += 4;
+  if (includesAny(text, ["warm", "amber", "vanille", "abend", "luxus"]) && product.category === "amber") score += 4;
+  if (includesAny(text, ["oud", "intensiv", "stark", "leder", "holz"]) && product.category === "oud") score += 4;
+  if (includesAny(text, ["rose", "blume", "floral", "jasmin"]) && includesAny(product.searchText, ["rose", "flora", "jasmin", "pfingstrose"])) score += 3;
+  if (includesAny(text, ["haltbar", "lange", "stark"]) && includesAny(product.searchText, ["extrait", "oud", "amber", "lang"])) score += 2;
+  if (includesAny(text, ["geschenk", "geburtstag", "schenken"]) && includesAny(product.searchText, ["luna", "solis", "flora"])) score += 2;
+  if (budget && product.price <= budget) score += 3;
+  if (budget && product.price > budget) score -= 3;
+
+  return score;
+}
+
+function formatProductSuggestion(product, sizeMl) {
+  const price = calculateSizePrice(product.price, sizeMl);
+  const sizeOption = getSizeOption(sizeMl);
+  return `${product.name} (${sizeOption.label}, ${formatEur(price)})`;
+}
+
 function getAiReply(userMessage) {
-  // Einfache lokale Wenn-Dann-Logik fuer Duftempfehlungen.
-  const text = userMessage.toLowerCase();
-  const reply = aiReplies.find((entry) => entry.keywords.some((keyword) => text.includes(keyword)));
+  // Lokaler KI-Assistent: wertet Produktdaten, Budget, Groesse und Kaufabsicht aus.
+  const text = normalizeAiText(userMessage);
+  const products = getCatalogProducts();
+  const sizeMl = getRequestedSize(text);
+  const budget = getRequestedBudget(text);
+  const mentionedProduct = findMentionedProduct(products, text);
+  const wantsCartAction = includesAny(text, ["warenkorb", "korb", "kaufen", "bestellen", "hinzufuegen", "hinzufügen"]);
+
+  if (mentionedProduct && wantsCartAction) {
+    addToCart({
+      name: mentionedProduct.name,
+      price: calculateSizePrice(mentionedProduct.price, sizeMl),
+      sizeMl,
+    });
+    setDrawerOpen(true);
+    return `${formatProductSuggestion(mentionedProduct, sizeMl)} wurde in den Warenkorb gelegt. Du kannst dort die Menge ändern oder eine Lieferadresse testen.`;
+  }
+
+  if (mentionedProduct) {
+    return `${mentionedProduct.name}: ${mentionedProduct.description} Duftnoten: ${mentionedProduct.notes}. Hintergrund: ${mentionedProduct.story} Für den Warenkorb kannst du z. B. schreiben: "${mentionedProduct.name} 25 ml in den Warenkorb".`;
+  }
+
+  if (includesAny(text, ["alle", "sortiment", "produkte", "parfums"])) {
+    const names = products.map((product) => product.name.replace("Aestas ", "")).join(", ");
+    return `Im Sortiment sind: ${names}. Frag mich zum Beispiel nach "frisch für Damen", "intensiv für Herren" oder "Geschenk unter 160".`;
+  }
+
+  const rankedProducts = products
+    .map((product) => ({ product, score: scoreProduct(product, text, budget) }))
+    .filter((entry) => entry.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3)
+    .map((entry) => entry.product);
+
+  if (rankedProducts.length > 0) {
+    const suggestions = rankedProducts.map((product) => formatProductSuggestion(product, sizeMl)).join(", ");
+    const budgetText = budget ? ` Ich habe dein Budget bis ${formatEur(budget)} berücksichtigt.` : "";
+    return `Meine Empfehlung: ${suggestions}.${budgetText} Klicke auf "Mehr Infos" für Duftnoten, Inhaltsstoffe und Hintergrundgeschichte.`;
+  }
+
+  const reply = aiReplies.find((entry) => entry.keywords.some((keyword) => text.includes(normalizeAiText(keyword))));
 
   if (reply) {
     return reply.text;
   }
 
-  return "Sag mir gern, ob du einen Damen- oder Herrenduft suchst und ob er frisch, warm oder intensiv sein soll. Dann gebe ich dir eine passende Empfehlung.";
+  return "Sag mir gern: Damen oder Herren, frisch/warm/intensiv, dein Budget und die gewünschte Größe. Beispiel: \"frisch für Damen unter 150\" oder \"Aestas Luna 25 ml in den Warenkorb\".";
 }
 
 function getSupportReply(userMessage) {
