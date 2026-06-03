@@ -20,6 +20,7 @@ const cartTotalEl = document.getElementById("cartTotal");
 const clearCartBtn = document.getElementById("clearCartBtn");
 const checkoutBtn = document.getElementById("checkoutBtn");
 const checkoutForm = document.getElementById("checkoutForm");
+const deliveryResidenceSelect = document.getElementById("deliveryResidenceSelect");
 const deliveryAddressInput = document.getElementById("deliveryAddressInput");
 const testDeliveryMapBtn = document.getElementById("testDeliveryMapBtn");
 const checkoutStatus = document.getElementById("checkoutStatus");
@@ -44,6 +45,7 @@ const addProductForm = document.getElementById("addProductForm");
 const productFormStatus = document.getElementById("productFormStatus");
 
 const mapSearchForm = document.getElementById("mapSearchForm");
+const mapResidenceSelect = document.getElementById("mapResidenceSelect");
 const mapAddressInput = document.getElementById("mapAddressInput");
 const mapFrame = document.getElementById("mapFrame");
 
@@ -72,6 +74,10 @@ const SIZE_OPTIONS = {
   50: { label: "50 ml Standard", multiplier: 0.6 },
   100: { label: "100 ml Vorteilspreis", multiplier: 1 },
 };
+
+// Echte Zahlung: Hier kann spaeter ein echter Stripe- oder PayPal-Zahlungslink eingetragen werden.
+// Keine geheimen API-Schluessel in statische GitHub-Pages-Dateien schreiben.
+const PAYMENT_PROVIDER_URL = "";
 
 let cart = normalizeCart(loadFromStorage(CART_STORAGE_KEY, []));
 let activeFilter = "all";
@@ -169,6 +175,36 @@ function calculateSizePrice(basePrice, sizeMl) {
 
 function getCartKey(name, sizeMl) {
   return `${name}__${sizeMl}`;
+}
+
+function getCartTotal() {
+  return cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+}
+
+function getSelectedPaymentMethod() {
+  return checkoutForm.querySelector('input[name="paymentMethod"]:checked')?.value || "karte";
+}
+
+function updateMapLocation(query) {
+  if (!query) {
+    return;
+  }
+  mapFrame.src = `https://www.google.com/maps?q=${encodeURIComponent(query)}&output=embed`;
+}
+
+function buildPaymentRedirectUrl(address, paymentMethod) {
+  // Stripe Payment Links oder PayPal Links koennen hier mit Trackingdaten geoeffnet werden.
+  if (!PAYMENT_PROVIDER_URL) {
+    return "";
+  }
+
+  const paymentUrl = new URL(PAYMENT_PROVIDER_URL);
+  paymentUrl.searchParams.set("client_reference_id", `aestas-${Date.now()}`);
+  paymentUrl.searchParams.set("utm_source", "aestas_checkout");
+  paymentUrl.searchParams.set("utm_content", paymentMethod);
+  paymentUrl.searchParams.set("delivery_address", address);
+  paymentUrl.searchParams.set("cart_total", String(Math.round(getCartTotal() * 100) / 100));
+  return paymentUrl.toString();
 }
 
 function normalizeCart(rawCart) {
@@ -342,7 +378,7 @@ function renderCart() {
   cartItemsEl.innerHTML = "";
 
   const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
-  const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const totalPrice = getCartTotal();
 
   bagCount.textContent = String(totalCount);
   cartTotalEl.textContent = formatEur(totalPrice);
@@ -742,6 +778,7 @@ clearCartBtn.addEventListener("click", () => {
 
 checkoutBtn.addEventListener("click", () => {
   const address = deliveryAddressInput.value.trim();
+  const paymentMethod = getSelectedPaymentMethod();
   if (!cart.length) {
     checkoutStatus.textContent = "Der Warenkorb ist noch leer.";
     return;
@@ -752,13 +789,15 @@ checkoutBtn.addEventListener("click", () => {
     return;
   }
 
-  checkoutStatus.textContent = `Checkout-Demo bereit für: ${address}`;
-  appendChatMessage(
-    supportMessages,
-    "Support: Checkout wurde als Demo ausgelöst. Adresse und Warenkorb wurden lokal geprüft.",
-    "agent"
-  );
-  setDrawerOpen(false);
+  const paymentUrl = buildPaymentRedirectUrl(address, paymentMethod);
+  if (!paymentUrl) {
+    checkoutStatus.textContent =
+      "Zahlung vorbereitet. Für echte Zahlungen bitte einen Stripe- oder PayPal-Link im Code bei PAYMENT_PROVIDER_URL eintragen.";
+    return;
+  }
+
+  checkoutStatus.textContent = `Weiterleitung zur Zahlung mit ${paymentMethod}.`;
+  window.location.href = paymentUrl;
 });
 
 cartToggleBtn.addEventListener("click", () => setDrawerOpen(true));
@@ -838,7 +877,7 @@ mapSearchForm.addEventListener("submit", (event) => {
   if (!query) {
     return;
   }
-  mapFrame.src = `https://www.google.com/maps?q=${encodeURIComponent(query)}&output=embed`;
+  updateMapLocation(query);
 });
 
 testDeliveryMapBtn.addEventListener("click", () => {
@@ -850,13 +889,36 @@ testDeliveryMapBtn.addEventListener("click", () => {
     return;
   }
 
-  mapFrame.src = `https://www.google.com/maps?q=${encodeURIComponent(query)}&output=embed`;
+  updateMapLocation(query);
   checkoutStatus.textContent = `Adresse wurde in Maps getestet: ${query}`;
   document.getElementById("filiale").scrollIntoView({ behavior: "smooth", block: "start" });
 });
 
 checkoutForm.addEventListener("submit", (event) => {
   event.preventDefault();
+});
+
+mapResidenceSelect.addEventListener("change", () => {
+  // Vordefinierter Wohnort: fuellt die Suche und springt direkt in der Karte dorthin.
+  const residence = mapResidenceSelect.value;
+  if (!residence) {
+    mapAddressInput.focus();
+    return;
+  }
+  mapAddressInput.value = residence;
+  updateMapLocation(residence);
+});
+
+deliveryResidenceSelect.addEventListener("change", () => {
+  // Wohnort im Checkout: uebernimmt die Auswahl als Lieferadresse und testet sie in Maps.
+  const residence = deliveryResidenceSelect.value;
+  if (!residence) {
+    deliveryAddressInput.focus();
+    return;
+  }
+  deliveryAddressInput.value = residence;
+  updateMapLocation(residence);
+  checkoutStatus.textContent = `Wohnort ausgewählt: ${residence}`;
 });
 
 aiChatForm.addEventListener("submit", (event) => {

@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css?v=20260603-7">
+  <link rel="stylesheet" href="./styles.css?v=20260603-8">
 </head>
 <body>
   <!-- Barrierefreiheit: Dieser Link erscheint beim Tabben und springt direkt zum Shopbereich. -->
@@ -369,6 +369,16 @@
           <h2>Adresse suchen und Karte anzeigen</h2>
           <p class="map-copy">Gib eine Adresse ein. Die eingebettete Google-Maps-Karte springt direkt an den gesuchten Ort.</p>
           <form class="map-search-form" id="mapSearchForm">
+            <label class="map-select-wrap" for="mapResidenceSelect">
+              <span>Wohnort auswählen</span>
+              <select id="mapResidenceSelect">
+                <option value="">Eigene Adresse eingeben</option>
+                <option value="Berlin Mitte">Berlin Mitte</option>
+                <option value="Düsseldorf Königsallee">Düsseldorf Königsallee</option>
+                <option value="New York Fifth Avenue">New York Fifth Avenue</option>
+                <option value="Dubai Mall">Dubai Mall</option>
+              </select>
+            </label>
             <label class="map-input-wrap" for="mapAddressInput">
               <i data-lucide="map-pin"></i>
               <input id="mapAddressInput" type="text" placeholder="z. B. Kurfürstendamm 21, Berlin" required>
@@ -573,12 +583,40 @@
     <div class="cart-footer">
       <p>Gesamtsumme: <strong id="cartTotal">0,00 EUR</strong></p>
       <form class="checkout-form" id="checkoutForm">
+        <label for="deliveryResidenceSelect">Wohnort auswählen</label>
+        <select id="deliveryResidenceSelect">
+          <option value="">Eigene Adresse eingeben</option>
+          <option value="Berlin Mitte">Berlin Mitte</option>
+          <option value="Düsseldorf Königsallee">Düsseldorf Königsallee</option>
+          <option value="New York Fifth Avenue">New York Fifth Avenue</option>
+          <option value="Dubai Mall">Dubai Mall</option>
+        </select>
         <label for="deliveryAddressInput">Lieferadresse</label>
         <input id="deliveryAddressInput" type="text" placeholder="z. B. Alexanderplatz 1, Berlin">
         <button class="btn btn-outline" id="testDeliveryMapBtn" type="button">
           <i data-lucide="map-pin"></i>
           Adresse in Maps testen
         </button>
+        <fieldset class="payment-methods">
+          <legend>Zahlungsmethode</legend>
+          <label>
+            <input type="radio" name="paymentMethod" value="karte" checked>
+            Kreditkarte
+          </label>
+          <label>
+            <input type="radio" name="paymentMethod" value="paypal">
+            PayPal
+          </label>
+          <label>
+            <input type="radio" name="paymentMethod" value="klarna">
+            Klarna
+          </label>
+          <label>
+            <input type="radio" name="paymentMethod" value="applepay">
+            Apple Pay
+          </label>
+        </fieldset>
+        <p class="payment-note">Für echte Zahlungen wird sicher zu einem Zahlungsanbieter weitergeleitet. Keine Kartendaten werden auf dieser Website gespeichert.</p>
         <p class="checkout-status" id="checkoutStatus" aria-live="polite"></p>
       </form>
       <div class="cart-footer-actions">
@@ -595,6 +633,6 @@
   </aside>
 
   <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="./script.js?v=20260603-7"></script>
+  <script src="./script.js?v=20260603-8"></script>
 </body>
 </html>

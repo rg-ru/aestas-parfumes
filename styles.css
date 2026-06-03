@@ -696,6 +696,27 @@ img {
   gap: 0.65rem;
 }
 
+.map-select-wrap {
+  flex: 1 1 220px;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.map-select-wrap span {
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+
+.map-select-wrap select {
+  min-height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink-main);
+  font: inherit;
+  padding: 0.65rem 0.75rem;
+}
+
 .map-input-wrap {
   flex: 1 1 260px;
   min-height: 44px;
@@ -1293,6 +1314,7 @@ img {
 }
 
 .checkout-form label,
+.payment-methods legend,
 .size-select-wrap span {
   font-size: 0.84rem;
   font-weight: 800;
@@ -1300,6 +1322,7 @@ img {
 }
 
 .checkout-form input,
+.checkout-form select,
 .size-select-wrap select {
   min-height: 44px;
   width: 100%;
@@ -1309,6 +1332,40 @@ img {
   color: var(--ink-main);
   font: inherit;
   padding: 0.68rem 0.75rem;
+}
+
+.payment-methods {
+  margin: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  padding: 0.7rem;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.payment-methods legend {
+  padding: 0 0.25rem;
+}
+
+.payment-methods label {
+  min-height: 34px;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.payment-methods input {
+  width: auto;
+  min-height: auto;
+  accent-color: var(--gold-dark);
+}
+
+.payment-note {
+  color: var(--ink-muted);
+  line-height: 1.45;
 }
 
 .checkout-status {
