@@ -25,7 +25,7 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Barrierefreiheit: sichtbarer Fokus fuer Tastaturbedienung. */
+/* Barrierefreiheit: sichtbarer Fokus für Tastaturbedienung. */
 a {
   text-underline-offset: 0.18em;
 }
@@ -50,7 +50,7 @@ body.no-scroll {
   overflow: hidden;
 }
 
-/* Sprunglink fuer Nutzer, die mit Tastatur oder Screenreader navigieren. */
+/* Sprunglink für Nutzer, die mit Tastatur oder Screenreader navigieren. */
 .skip-link {
   position: fixed;
   left: 1rem;
@@ -74,7 +74,7 @@ img {
 }
 
 .container {
-  /* Wiederverwendbarer Inhaltsrahmen fuer alle Seitenbereiche. */
+  /* Wiederverwendbarer Inhaltsrahmen für alle Seitenbereiche. */
   width: min(1140px, 92vw);
   margin: 0 auto;
 }
@@ -195,7 +195,7 @@ img {
 }
 
 .hero {
-  /* Hero-Bereich mit vollflaechigem Bild und Text darueber. */
+  /* Hero-Bereich mit vollflächigem Bild und Text darüber. */
   min-height: 72vh;
   position: relative;
   overflow: hidden;
@@ -327,7 +327,7 @@ img {
 }
 
 .highlight-grid {
-  /* Drei kurze Vorteile unter dem Hero, auf Mobilgeraeten spaeter einspaltig. */
+  /* Drei kurze Vorteile unter dem Hero, auf Mobilgeräten später einspaltig. */
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
@@ -350,7 +350,7 @@ img {
 }
 
 .project-section {
-  /* Kurze Projekt-Erklaerung, damit sofort klar ist, worum es geht. */
+  /* Kurze Projekt-Erklärung, damit sofort klar ist, worum es geht. */
   padding: 2.2rem 0;
   background: #fbf7ef;
   border-bottom: 1px solid var(--line);
@@ -380,7 +380,7 @@ img {
 .manage-section,
 .map-section,
 .chat-section {
-  /* Einheitliche vertikale Abstaende fuer die Hauptbereiche. */
+  /* Einheitliche vertikale Abstände fuer die Hauptbereiche. */
   padding: 3.2rem 0 4rem;
 }
 
@@ -407,7 +407,7 @@ img {
 }
 
 .filter-group {
-  /* Filterbuttons duerfen umbrechen, damit sie auf kleinen Bildschirmen nicht ueberlaufen. */
+  /* Filterbuttons dürfen umbrechen, damit sie auf kleinen Bildschirmen nicht überlaufen. */
   display: flex;
   flex-wrap: wrap;
   gap: 0.45rem;
@@ -915,7 +915,7 @@ img {
 }
 
 .page-hero {
-  /* Gemeinsamer Kopfbereich fuer die Unterseiten. */
+  /* Gemeinsamer Kopfbereich für die Unterseiten. */
   background: linear-gradient(135deg, #efe7d8 0%, #f8f3ea 100%);
   border-bottom: 1px solid var(--line);
 }
@@ -1145,7 +1145,7 @@ img {
 }
 
 .drawer-backdrop {
-  /* Dunkler Hintergrund beim geoeffneten Warenkorb. */
+  /* Dunkler Hintergrund beim geöffneten Warenkorb. */
   position: fixed;
   inset: 0;
   z-index: 30;
@@ -1563,7 +1563,7 @@ img {
 }
 
 @keyframes fade-up {
-  /* Dezente Animation fuer Karten und Seitenkoepfe. */
+  /* Dezente Animation fuer Karten und Seitenköpfe. */
   from {
     opacity: 0;
     transform: translateY(14px);
